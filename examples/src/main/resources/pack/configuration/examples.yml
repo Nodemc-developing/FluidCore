@@ -1,0 +1,93 @@
+"fluidcore:fluids":
+  minecraft:water:
+    override: true
+    temperature: 301
+  fluidcoreexample:heated_water:
+    display-name: '热水'
+    tags: [fluidcoreexample:processed]
+    density: 990
+    viscosity: 550
+    temperature: 350
+    light-level: 0
+    color: '#FF4AAEFF'
+    texture: 'minecraft:block/water_still'
+    rarity: uncommon
+    sounds:
+      container-fill: 'minecraft:item.bucket.fill'
+      container-empty: 'minecraft:item.bucket.empty'
+
+"fluidcore:fluid-tags":
+  fluidcoreexample:drinkable:
+    values: [minecraft:water, fluidcoreexample:heated_water]
+  fluidcoreexample:processed_drinks:
+    values: ['#fluidcoreexample:drinkable']
+
+items:
+  fluidcoreexample:canteen:
+    material: glass_bottle
+    data:
+      item_name: 'FluidCore 水壶'
+      max_stack_size: 1
+    settings:
+      "fluidcore:container":
+        capacity: 4000
+        allowed-fluids: ['#fluidcoreexample:processed_drinks']
+    behavior:
+      type: fluidcore:container
+
+  fluidcoreexample:tank:
+    material: iron_block
+    data:
+      item_name: 'FluidCore 储罐'
+      max_stack_size: 1
+    model: minecraft:block/iron_block
+    behavior:
+      type: block_item
+      block:
+        behavior:
+          type: fluidcore:tank
+          capacity: 8000
+          allowed-fluids: [minecraft:water, minecraft:lava, minecraft:milk, fluidcoreexample:heated_water]
+        settings:
+          hardness: 1.5
+          resistance: 6
+        loot:
+          pools:
+            - rolls: 1
+              entries:
+                - type: item
+                  item: fluidcoreexample:tank
+                  functions:
+                    - type: fluidcore:preserve_tank
+        state:
+          auto_state: solid
+          model: minecraft:block/iron_block
+
+  fluidcoreexample:heater:
+    material: copper_block
+    data:
+      item_name: 'FluidCore 休眠水处理器'
+      max_stack_size: 1
+    model: minecraft:block/copper_block
+    behavior:
+      type: block_item
+      block:
+        behaviors:
+          - type: fluidcore:tank
+            capacity: 8000
+            allowed-fluids: [minecraft:water, fluidcoreexample:heated_water]
+          - type: fluidcoreexample:heater
+        settings:
+          hardness: 1.5
+          resistance: 6
+        loot:
+          pools:
+            - rolls: 1
+              entries:
+                - type: item
+                  item: fluidcoreexample:heater
+                  functions:
+                    - type: fluidcore:preserve_tank
+        state:
+          auto_state: solid
+          model: minecraft:block/copper_block

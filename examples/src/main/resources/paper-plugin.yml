@@ -1,0 +1,17 @@
+name: FluidCoreExamples
+version: '${version}'
+main: com.ydxc20091.fluidcore.examples.FluidCoreExamplesPlugin
+api-version: '1.21'
+authors: [ydxc20091]
+description: Optional CE tank, container and sleeping processor examples by ydxc20091
+folia-supported: true
+dependencies:
+  server:
+    FluidCore:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    CraftEngine:
+      load: BEFORE
+      required: true
+      join-classpath: true

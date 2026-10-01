@@ -1,0 +1,7 @@
+# FluidCore by ydxc20091
+config-version: 1
+async:
+  workers: 2
+  queue-capacity: 1024
+diagnostics:
+  ui: true
