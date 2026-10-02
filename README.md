@@ -25,6 +25,8 @@ One bucket is **1000 mB**. Fluid identity includes its components, so different 
 
 Install CraftEngine and place `FluidCore-0.1.0-SNAPSHOT.jar` in the server's `plugins` directory. Restart the server. Install `FluidCore-Examples-0.1.0-SNAPSHOT.jar` separately if you want the optional example pack.
 
+FluidCore uses bStats for basic usage metrics (plugin ID `34449`). You can disable metrics in `plugins/bStats/config.yml`.
+
 ## Building
 
 Supply the matching CraftEngine JAR, then build the plugin and publish developer artifacts locally:

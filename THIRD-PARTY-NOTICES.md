@@ -8,6 +8,7 @@ FluidCore 自研部分 Copyright © 2026 ydxc20091。`api` 模块为 Apache-2.0�
 | --- | --- | --- |
 | CraftEngine 26.10-SNAPSHOT | 必需服务端运行依赖 | 由使用者单独安装；本库插件不内嵌 CE JAR |
 | Paper API | 编译服务端适配 | provided / compileOnly，不内嵌 |
+| [bStats](https://bstats.org/) 3.2.1 | Basic usage metrics (plugin ID `34449`) | MIT, Bastian Oppermann; [license](LICENSES/bStats.txt) |
 | [Sparrow YAML](https://github.com/Xiao-MoMi/sparrow-yaml) 1.0.22 | 运行插件配置读取 | GPL-3.0，XiaoMoMi；[许可证](LICENSES/Sparrow-YAML.txt) |
 | [SnakeYAML Engine](https://bitbucket.org/snakeyaml/snakeyaml-engine/src) 3.1-SNAPSHOT-forked | Sparrow YAML 内嵌 YAML 引擎 | Apache-2.0，SnakeYAML contributors（Andrey Somov、Alexander Maslov 等）；[许可证](LICENSES/SnakeYAML-Engine.txt) |
 | [Sparrow UI](https://github.com/Catnies/sparrow-ui) beta.38 | 按需诊断界面 | Apache-2.0，Catnies；[许可证](LICENSES/Sparrow-UI.txt) |

@@ -143,6 +143,7 @@ project(":paper-ce") {
     dependencies {
         "api"(project(":api"))
         "implementation"(project(":core"))
+        "implementation"("org.bstats:bstats-bukkit:${providers.gradleProperty("bstatsVersion").get()}")
         "implementation"("net.momirealms:sparrow-yaml:${providers.gradleProperty("sparrowYamlVersion").get()}")
         "implementation"("net.momirealms:sparrow-ui:${providers.gradleProperty("sparrowUiVersion").get()}") { isTransitive = false }
     }
@@ -152,6 +153,7 @@ project(":paper-ce") {
         archiveClassifier.set("")
         relocate("net.momirealms.sparrow.yaml", "com.ydxc20091.fluidcore.libs.yaml")
         relocate("net.momirealms.sparrow.ui", "com.ydxc20091.fluidcore.libs.ui")
+        relocate("org.bstats", "com.ydxc20091.fluidcore.libs.bstats")
         exclude("META-INF/*.SF", "META-INF/*.RSA", "META-INF/*.DSA")
         mergeServiceFiles()
         from(rootProject.file("THIRD-PARTY-NOTICES.md")) { into("META-INF") }
