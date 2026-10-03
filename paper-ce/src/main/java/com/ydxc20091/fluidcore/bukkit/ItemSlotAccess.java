@@ -35,7 +35,11 @@ public final class ItemSlotAccess implements TransactionParticipant {
         ItemStack current = inventory.getItem(slot);
         if (empty(current)) return false;
         ItemStack[] proposed = copy(inventory.getContents());
-        if (current.getAmount() == 1) proposed[slot] = copy(replacement);
+        if (current.getAmount() == 1) {
+            proposed[slot] = null;
+            if (empty(replacement) || replacement.getAmount() <= Math.min(inventory.getMaxStackSize(), replacement.getMaxStackSize())) proposed[slot] = copy(replacement);
+            else if (!putReplacement(proposed, replacement)) return false;
+        }
         else {
             proposed[slot].setAmount(current.getAmount() - 1);
             if (!putReplacement(proposed, replacement)) return false;

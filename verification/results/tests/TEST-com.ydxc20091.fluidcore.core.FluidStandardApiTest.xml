@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.core.FluidStandardApiTest" tests="24" skipped="0" failures="0" errors="0" timestamp="2026-10-01T09:29:25.563Z" hostname="WIN-B5E9U0O0ATH" time="0.085">
+  <properties/>
+  <testcase name="ingredientParsingRejectsAmbiguousFractionalAndOverflowedInputs()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.006"/>
+  <testcase name="definitionBuilderKeepsLegacyConstructionAndExposesMetadata()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.001"/>
+  <testcase name="metadataOverlayConflictsAndMissingBasesLeaveWholeBatchUnchanged()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.008"/>
+  <testcase name="propertiesHaveDeclaredDefaultsAndPhysicalBounds()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.002"/>
+  <testcase name="fluidAndTagBatchIsAtomicAndDoesNotReplaceOtherOwners()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.002"/>
+  <testcase name="typedComponentsRoundTripWithoutMutationAndRejectMalformedData()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.002"/>
+  <testcase name="typedAccessDoesNotImplicitlyRegisterUnknownComponents()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.002"/>
+  <testcase name="automaticTransferRejectsWrongContextAndUnsupportedStorages()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.005"/>
+  <testcase name="ingredientsSeparateIdentityAndQuantityAndProvideCandidates()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.006"/>
+  <testcase name="tagIngredientsTrackPublishedTagChangesAndSkipUnregisteredCandidates()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.004"/>
+  <testcase name="ingredientsParseStandardFormsWithoutLosingLongAmounts()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.002"/>
+  <testcase name="baseReloadKeepsOtherOwnerOverlayButBaseRemovalDiscardsIt()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.0"/>
+  <testcase name="automaticDrainSkipsDisallowedIdentityAndSimulatesWithoutChanges()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.01"/>
+  <testcase name="singleTankQueriesPreserveOverCapacityData()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.001"/>
+  <testcase name="standaloneTagsHaveSeparateOwnersAndKeepSnapshotsImmutable()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.001"/>
+  <testcase name="legacyFluidReplacementRetainsStandaloneTagsAndOtherOwners()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.0"/>
+  <testcase name="automaticTransferSkipsRejectedFirstIdentityAndConservesSelectedFluid()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.002"/>
+  <testcase name="stackTypedHelpersAndIdentityMatchingAreDistinctFromQuantity()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.001"/>
+  <testcase name="explicitMetadataOverlayPreservesBaseOwnerAndRestoresOriginalTags()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.002"/>
+  <testcase name="builtinDefinitionsExposeStandardMetadata()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.001"/>
+  <testcase name="standardCodecsValidateEncodingAndPreserveMutableByteIsolation()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.005"/>
+  <testcase name="stackQuantityHelpersPreserveIdentityAndCheckOverflow()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.002"/>
+  <testcase name="validityQueriesHonorFiltersPortsRatesAndOwnershipWithoutMutation()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.004"/>
+  <testcase name="metadataIsImmutableAndCanBeEditedByCopy()" classname="com.ydxc20091.fluidcore.core.FluidStandardApiTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

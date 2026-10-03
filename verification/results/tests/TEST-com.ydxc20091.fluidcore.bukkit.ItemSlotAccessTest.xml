@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.bukkit.ItemSlotAccessTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-01T09:29:28.896Z" hostname="WIN-B5E9U0O0ATH" time="0.004">
+  <properties/>
+  <testcase name="externalInventoryChangeFailsValidationAndSurvivesRollback()" classname="com.ydxc20091.fluidcore.bukkit.ItemSlotAccessTest" time="0.0"/>
+  <testcase name="crossingTickFailsAndRestoresInventory()" classname="com.ydxc20091.fluidcore.bukkit.ItemSlotAccessTest" time="0.0"/>
+  <testcase name="nestedRollbackRestoresParentThenOuterRollbackRestoresOriginal()" classname="com.ydxc20091.fluidcore.bukkit.ItemSlotAccessTest" time="0.001"/>
+  <testcase name="commitReplacesTheOriginalSingleItem()" classname="com.ydxc20091.fluidcore.bukkit.ItemSlotAccessTest" time="0.0"/>
+  <testcase name="fullStorageRejectsSplitEvenWhenArmorSlotsAreEmpty()" classname="com.ydxc20091.fluidcore.bukkit.ItemSlotAccessTest" time="0.0"/>
+  <testcase name="stackedContainerSplitsIntoARealStorageSlotAndRollsBack()" classname="com.ydxc20091.fluidcore.bukkit.ItemSlotAccessTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -18,7 +18,7 @@ allprojects {
 }
 
 // Java 21 on Windows decodes launcher argument files using the platform charset.
-// ASCII build paths support source directories with non-ASCII characters.
+// ASCII build paths keep test workers usable when the source directory contains Chinese.
 val windowsUnicodePath = System.getProperty("os.name").startsWith("Windows") && rootDir.path.any { it.code > 127 }
 if (windowsUnicodePath || providers.gradleProperty("fluidcoreBuildRoot").isPresent) {
     val cacheRoot = providers.gradleProperty("fluidcoreBuildRoot").orNull
@@ -30,12 +30,12 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     extensions.configure<JavaPluginExtension> {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+        toolchain.languageVersion.set(JavaLanguageVersion.of(25))
         withSourcesJar()
         withJavadocJar()
     }
     tasks.withType<JavaCompile>().configureEach {
-        options.release.set(21)
+        options.release.set(if (project.name == "api" || project.name == "core") 21 else 25)
         options.encoding = "UTF-8"
     }
     tasks.withType<Javadoc>().configureEach {
@@ -44,13 +44,22 @@ subprojects {
             addStringOption("Xdoclint:none", "-quiet")
         }
     }
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+        testLogging { events("failed", "skipped") }
+    }
+    dependencies {
+        "testImplementation"("org.junit.jupiter:junit-jupiter:5.12.2")
+        "testRuntimeOnly"("org.junit.platform:junit-platform-launcher")
+    }
     tasks.withType<Jar>().configureEach {
         isPreserveFileTimestamps = false
         isReproducibleFileOrder = true
         manifest.attributes["Implementation-Vendor"] = "ydxc20091"
         manifest.attributes["Implementation-Version"] = project.version
         from(rootProject.file(if (project.name == "api") "LICENSE-API" else "LICENSE")) {
-            into("META-INF"); rename { "LICENSE" }
+            into("META-INF/licenses")
+            rename { if (project.name == "api") "FluidCore-API-Apache-2.0.txt" else "FluidCore-GPL-3.0.txt" }
         }
     }
     extensions.configure<PublishingExtension> {
@@ -125,10 +134,14 @@ val ceLibraryFiles = files(prepareCeLibraries.flatMap { it.archiveFile }).builtB
 listOf(":paper-ce", ":examples").forEach { path -> project(path) {
     dependencies {
         "compileOnly"("io.papermc.paper:paper-api:${providers.gradleProperty("paperVersion").get()}")
+        "testImplementation"("io.papermc.paper:paper-api:${providers.gradleProperty("paperVersion").get()}")
         "compileOnly"(ceLibraryFiles)
+        "testImplementation"(ceLibraryFiles)
         if (ceJarFile != null) {
             "compileOnly"(pinnedCeFiles)
             "compileOnly"(files(ceProxy).builtBy(extractCeProxy))
+            "testImplementation"(pinnedCeFiles)
+            "testImplementation"(files(ceProxy).builtBy(extractCeProxy))
         }
     }
     tasks.withType<JavaCompile>().configureEach { dependsOn(verifyCeJar) }
@@ -155,6 +168,7 @@ project(":paper-ce") {
         relocate("net.momirealms.sparrow.ui", "com.ydxc20091.fluidcore.libs.ui")
         relocate("org.bstats", "com.ydxc20091.fluidcore.libs.bstats")
         exclude("META-INF/*.SF", "META-INF/*.RSA", "META-INF/*.DSA")
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         mergeServiceFiles()
         from(rootProject.file("THIRD-PARTY-NOTICES.md")) { into("META-INF") }
         from(rootProject.file("LICENSES")) { into("META-INF/licenses") }
@@ -168,6 +182,27 @@ project(":examples") {
         "compileOnly"(project(":paper-ce"))
     }
     tasks.named<Jar>("jar") { archiveBaseName.set("FluidCore-Examples") }
+}
+project(":benchmarks") {
+    dependencies {
+        "implementation"(project(":core"))
+        "implementation"("org.openjdk.jmh:jmh-core:1.37")
+        "annotationProcessor"("org.openjdk.jmh:jmh-generator-annprocess:1.37")
+    }
+    tasks.register<JavaExec>("jmh") {
+        group = "verification"
+        description = "Runs reproducible JMH benchmarks and writes raw JSON."
+        classpath = project.extensions.getByType<SourceSetContainer>()["main"].runtimeClasspath
+        mainClass.set("org.openjdk.jmh.Main")
+        val resultFile = layout.buildDirectory.file("results/jmh.json")
+        doFirst { resultFile.get().asFile.parentFile.mkdirs() }
+        val options = providers.gradleProperty("jmhArgs").orNull?.split(" ")?.filter(String::isNotBlank)
+            ?: listOf("-f", "3", "-wi", "5", "-i", "10", "-w", "1s", "-r", "1s")
+        args(options)
+        args("-prof", "gc", "-rf", "json", "-rff", resultFile.get().asFile.absolutePath)
+        javaLauncher.set(project.extensions.getByType<JavaToolchainService>().launcherFor { languageVersion.set(JavaLanguageVersion.of(21)) })
+    }
+
 }
 tasks.named("build") { dependsOn(subprojects.map { it.tasks.named("build") }) }
 tasks.register<Copy>("distribution") {
@@ -195,14 +230,22 @@ val sourceDistribution = tasks.register<Zip>("sourceDistribution") {
     dependsOn(prepareSourceGitIgnore)
     from(sourceGitIgnoreFile) { rename { ".gitignore" } }
     group = "build"
-    description = "Packages buildable source, examples and license notices."
+    description = "Packages buildable corresponding source, examples, notices and verification records."
     archiveFileName.set("FluidCore-${project.version}-sources.zip")
     destinationDirectory.set(rootProject.file("dist"))
     from(rootProject.projectDir) {
         includeEmptyDirs = false
-        exclude("benchmarks/**", "verification/**", "**/src/test/**", ".git/**", ".gradle/**", "**/.gradle/**", ".local/**", "dist/**", "**/build/**", "**/__pycache__/**", ".idea/**", "*.iml")
+        exclude(".git/**", ".gradle/**", "**/.gradle/**", ".local/**", "dist/**", "**/build/**", "**/__pycache__/**", ".idea/**", "*.iml", "**/*.log")
     }
     isPreserveFileTimestamps = false
     isReproducibleFileOrder = true
 }
 tasks.named("distribution") { dependsOn(sourceDistribution) }
+tasks.register<Copy>("collectVerificationResults") {
+    group = "verification"
+    from(project(":benchmarks").layout.buildDirectory.file("results/jmh.json")) { rename { "jmh-native.json" } }
+    listOf(":core", ":paper-ce").forEach { path ->
+        from(project(path).layout.buildDirectory.dir("test-results/test")) { include("*.xml"); into("tests") }
+    }
+    into(rootProject.file("verification/results"))
+}

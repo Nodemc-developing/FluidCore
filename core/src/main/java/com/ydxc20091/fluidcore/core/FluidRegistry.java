@@ -29,7 +29,10 @@ public final class FluidRegistry {
             FluidDefinition.builder("minecraft:milk").displayName("Milk").tags(FluidKey.of("fluidcore:milk"))
                 .properties(FluidProperties.builder().density(1030).viscosity(1000).temperature(300).color(0xffffffff)
                     .bucketItem("minecraft:milk_bucket").sound(FluidSound.CONTAINER_FILL, "minecraft:item.bucket.fill")
-                    .sound(FluidSound.CONTAINER_EMPTY, "minecraft:item.bucket.empty").build()).build()
+                    .sound(FluidSound.CONTAINER_EMPTY, "minecraft:item.bucket.empty").build()).build(),
+            FluidDefinition.builder("minecraft:honey").displayName("Honey").tags(FluidKey.of("fluidcore:honey"), FluidKey.of("c:honey"))
+                .properties(FluidProperties.builder().density(1420).viscosity(10000).temperature(300).color(0xffdf9a22)
+                    .sound(FluidSound.CONTAINER_FILL, "minecraft:item.bottle.fill").sound(FluidSound.CONTAINER_EMPTY, "minecraft:item.bottle.empty").build()).build()
         ));
     }
 

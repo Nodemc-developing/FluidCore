@@ -1,0 +1,14 @@
+{
+  "author": "ydxc20091",
+  "pass": true,
+  "offline_compilation": true,
+  "executed": true,
+  "marker": "FLUIDCORE_MAVEN_CONSUMER PASS",
+  "group": "com.ydxc20091.fluidcore",
+  "java_target": 21,
+  "source": "verification/consumer",
+  "commands": [
+    "gradlew :api:publishToMavenLocal :core:publishToMavenLocal :paper-ce:publishToMavenLocal",
+    "gradlew -p verification/consumer clean verifyStandardApi --offline"
+  ]
+}

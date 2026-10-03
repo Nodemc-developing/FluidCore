@@ -7,6 +7,9 @@ import net.momirealms.craftengine.core.world.context.UseOnContext;
 
 final class FluidContainerBehavior extends ItemBehavior {
     private final CraftEngineBridge bridge;
-    FluidContainerBehavior(CraftEngineBridge bridge) { this.bridge = bridge; }
+    private final String itemModel;
+    FluidContainerBehavior(CraftEngineBridge bridge) { this(bridge, null); }
+    FluidContainerBehavior(CraftEngineBridge bridge, String itemModel) { this.bridge = bridge; this.itemModel = itemModel; }
+    String itemModel() { return itemModel; }
     @Override public InteractionResult useOnBlock(UseOnContext context) { return bridge.interact(context); }
 }

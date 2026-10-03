@@ -41,13 +41,21 @@ public final class ItemContainerTransfers {
      * install the replacement exactly once. For actual inventory atomicity use transfer instead.
      */
     public ItemContainerTransferResult tryFillContainer(ItemStack item, FluidStorage source, long maximum, FluidAction action) {
-        return detached(item, source, maximum, action, true);
+        return detached(item, source, maximum, action, true, null);
     }
     /** Same ownership and copy-only contract as tryFillContainer, moving fluid into the target. */
     public ItemContainerTransferResult tryEmptyContainer(ItemStack item, FluidStorage target, long maximum, FluidAction action) {
-        return detached(item, target, maximum, action, false);
+        return detached(item, target, maximum, action, false, null);
     }
-    private ItemContainerTransferResult detached(ItemStack input, FluidStorage storage, long maximum, FluidAction action, boolean fill) {
+    /** Joins the supplied owner transaction; the caller must install the replacement before committing it. */
+    public ItemContainerTransferResult tryFillContainer(ItemStack item, FluidStorage source, long maximum, FluidAction action, FluidTransaction parent) {
+        return detached(item, source, maximum, action, true, Objects.requireNonNull(parent, "parent"));
+    }
+    /** Like the matching fill overload, a successful child remains rollbackable by the parent. */
+    public ItemContainerTransferResult tryEmptyContainer(ItemStack item, FluidStorage target, long maximum, FluidAction action, FluidTransaction parent) {
+        return detached(item, target, maximum, action, false, Objects.requireNonNull(parent, "parent"));
+    }
+    private ItemContainerTransferResult detached(ItemStack input, FluidStorage storage, long maximum, FluidAction action, boolean fill, FluidTransaction parent) {
         Objects.requireNonNull(input, "item"); Objects.requireNonNull(storage, "storage"); Objects.requireNonNull(action, "action");
         if (maximum < 0) throw new IllegalArgumentException("Negative transfer maximum");
         storage.context().checkAccess();
@@ -57,7 +65,7 @@ public final class ItemContainerTransfers {
         ItemFluidContainer handler = resolved.get();
         if (handler.readResult().protectedData()) return result(ItemContainerTransferResult.Status.PROTECTED_DATA, original, FluidStack.EMPTY, handler.readResult());
         if (!storage.supportsTransactions()) return result(ItemContainerTransferResult.Status.ATOMIC_TRANSFER_UNSUPPORTED, original, FluidStack.EMPTY, handler.readResult());
-        try (FluidTransaction transaction = FluidTransaction.open()) {
+        try (FluidTransaction transaction = parent == null ? FluidTransaction.open() : parent.openNested()) {
             FluidStack moved = fill ? fillContainer(handler, storage, maximum, transaction) : emptyContainer(handler, storage, maximum, transaction);
             if (moved.isEmpty()) return result(ItemContainerTransferResult.Status.NO_TRANSFER, original, moved, handler.readResult());
             if (action == FluidAction.EXECUTE) commit(transaction);
@@ -69,7 +77,7 @@ public final class ItemContainerTransfers {
         return new ItemContainerTransferResult(status, replacement, moved, read);
     }
 
-    /** Creative players retain their item; target changes are explicit creative actions. */
+    /** Creative players retain a filled input when filling storage; extraction delivers its output. */
     public Result transfer(Player player, int inventorySlot, FluidStorage storage, long maximum) {
         ItemSlotAccess slot = new ItemSlotAccess(player.getInventory(), inventorySlot, BukkitStorageContext.entity(player));
         return transfer(slot, player.getGameMode(), storage, maximum);
@@ -77,7 +85,8 @@ public final class ItemContainerTransfers {
     /**
      * Both actual slot replacement and fluid mutation enlist in this single synchronous native
      * transaction. Storage and slot must share the effective ownership context. Never crosses a
-     * tick or awaits asynchronously. Creative mode intentionally omits slot replacement.
+     * tick or awaits asynchronously. Creative mode retains filled inputs when filling storage,
+     * but extracting from storage must replace the empty container with the transferred fluid.
      */
     public Result transfer(ItemSlotAccess slot, GameMode mode, FluidStorage storage, long maximum) {
         Objects.requireNonNull(slot, "slot"); Objects.requireNonNull(mode, "mode"); Objects.requireNonNull(storage, "storage");
@@ -93,10 +102,12 @@ public final class ItemContainerTransfers {
         if (handler.readResult().protectedData()) return Result.PROTECTED_DATA;
         try (FluidTransaction transaction = FluidTransaction.open()) {
             transaction.enlist(slot);
-            FluidStack moved = handler.content().isEmpty() ? fillContainer(handler, storage, maximum, transaction)
+            boolean fillingContainer = handler.content().isEmpty();
+            FluidStack moved = fillingContainer ? fillContainer(handler, storage, maximum, transaction)
                     : emptyContainer(handler, storage, maximum, transaction);
             if (moved.isEmpty()) return Result.NO_TRANSFER;
-            if (mode != GameMode.CREATIVE && !slot.replaceOne(handler.item(), transaction)) return Result.NO_INVENTORY_SPACE;
+            if ((mode != GameMode.CREATIVE || fillingContainer)
+                    && !slot.replaceOne(handler.item(), transaction)) return Result.NO_INVENTORY_SPACE;
             commit(transaction);
             return Result.SUCCESS;
         }

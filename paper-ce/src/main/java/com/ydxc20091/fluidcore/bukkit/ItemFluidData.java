@@ -22,6 +22,7 @@ public final class ItemFluidData {
 
     public ItemFluidReadResult read(ItemStack item) {
         Objects.requireNonNull(item, "item");
+        if (ForeignFluidData.item(item)) return result(item, ItemFluidReadResult.Status.CONFLICT, FluidStack.EMPTY, new byte[0], "Foreign fluid data is preserved and requires an explicit migration");
         if (!item.hasItemMeta()) return result(item, ItemFluidReadResult.Status.ABSENT, FluidStack.EMPTY, new byte[0], "No item fluid record");
         PersistentDataContainer pdc = item.getItemMeta().getPersistentDataContainer();
         if (pdc.has(INITIALIZED_KEY) && !pdc.has(INITIALIZED_KEY, PersistentDataType.BYTE))
@@ -31,11 +32,14 @@ public final class ItemFluidData {
             if (initialized == null || initialized != 1)
                 return result(item, ItemFluidReadResult.Status.INVALID, FluidStack.EMPTY, new byte[0], "Invalid initialization marker");
         }
-        if (!pdc.has(DATA_KEY)) return result(item, pdc.has(INITIALIZED_KEY) ? ItemFluidReadResult.Status.EMPTY : ItemFluidReadResult.Status.ABSENT,
+        if (pdc.has(DATA_KEY) && pdc.has(ItemContainerTransfers.TANK_DATA_KEY))
+            return result(item, ItemFluidReadResult.Status.CONFLICT, FluidStack.EMPTY, new byte[0], "Item carries both container and block-tank records");
+        NamespacedKey recordKey = pdc.has(ItemContainerTransfers.TANK_DATA_KEY) ? ItemContainerTransfers.TANK_DATA_KEY : DATA_KEY;
+        if (!pdc.has(recordKey)) return result(item, pdc.has(INITIALIZED_KEY) ? ItemFluidReadResult.Status.EMPTY : ItemFluidReadResult.Status.ABSENT,
                 FluidStack.EMPTY, new byte[0], pdc.has(INITIALIZED_KEY) ? "Initialized empty container" : "No item fluid record");
-        if (!pdc.has(DATA_KEY, PersistentDataType.BYTE_ARRAY))
+        if (!pdc.has(recordKey, PersistentDataType.BYTE_ARRAY))
             return result(item, ItemFluidReadResult.Status.WRONG_TYPE, FluidStack.EMPTY, new byte[0], "Fluid record has the wrong PDC type");
-        byte[] raw = pdc.get(DATA_KEY, PersistentDataType.BYTE_ARRAY);
+        byte[] raw = pdc.get(recordKey, PersistentDataType.BYTE_ARRAY);
         if (raw == null) return result(item, ItemFluidReadResult.Status.WRONG_TYPE, FluidStack.EMPTY, new byte[0], "Fluid record is not readable as bytes");
         FluidReadResult decoded = codec.decode(raw);
         ItemFluidReadResult.Status status = switch (decoded.status()) {
@@ -62,7 +66,9 @@ public final class ItemFluidData {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) throw new IllegalArgumentException("Item does not support persistent data");
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        if (encoded == null) pdc.remove(DATA_KEY); else pdc.set(DATA_KEY, PersistentDataType.BYTE_ARRAY, encoded);
+        if (pdc.has(ItemContainerTransfers.TANK_DATA_KEY)) {
+            pdc.set(ItemContainerTransfers.TANK_DATA_KEY, PersistentDataType.BYTE_ARRAY, encoded == null ? codec.encode(FluidStack.EMPTY) : encoded);
+        } else if (encoded == null) pdc.remove(DATA_KEY); else pdc.set(DATA_KEY, PersistentDataType.BYTE_ARRAY, encoded);
         pdc.set(INITIALIZED_KEY, PersistentDataType.BYTE, (byte) 1);
         if (!item.setItemMeta(meta)) throw new IllegalArgumentException("Item rejected persistent metadata");
     }

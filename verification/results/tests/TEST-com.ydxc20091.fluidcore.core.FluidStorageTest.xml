@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.core.FluidStorageTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-10-01T09:29:25.649Z" hostname="WIN-B5E9U0O0ATH" time="0.044">
+  <properties/>
+  <testcase name="partialTransferConservesFluidWithOutputOnlySource()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.0"/>
+  <testcase name="rateLimitsResetAtNextTickAndRollbackRestoresBudget()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.0"/>
+  <testcase name="rejectedDestinationLeavesSourceUntouched()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.001"/>
+  <testcase name="sidePermissionsDefaultToClosed()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.0"/>
+  <testcase name="dynamicOwnershipRejectsEitherParticipantWithoutFixedRegionTokens()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.0"/>
+  <testcase name="maximumLongDoesNotOverflow()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.0"/>
+  <testcase name="readonlyAndFiltersKeepState()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.001"/>
+  <testcase name="overCapacityRestorePreservesAndAllowsDrainOnlyUntilBelowCapacity()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.0"/>
+  <testcase name="transferToSameObjectIsRejected()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.0"/>
+  <testcase name="capacityAndIdentityPreventMixing()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.001"/>
+  <testcase name="nonTransactionalProviderIsRejectedBeforeAnyMutation()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.003"/>
+  <testcase name="guardedCapabilityProbeReturnsWrongContextInsteadOfEscapingException()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.003"/>
+  <testcase name="cachedSnapshotsStayImmutableAcrossMutationAndRollback()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.001"/>
+  <testcase name="multiTankRespectsIndividualFiltersAndIndexes()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.001"/>
+  <testcase name="repeatedRandomTransfersConserveTotal()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.024"/>
+  <testcase name="destinationExceptionAfterTentativeMutationRollsBackBothEnds()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.002"/>
+  <testcase name="simulatedTransferDoesNotMutateOrConsumeRateBudget()" classname="com.ydxc20091.fluidcore.core.FluidStorageTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

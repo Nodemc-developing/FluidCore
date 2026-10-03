@@ -5,3 +5,6 @@ async:
   queue-capacity: 1024
 diagnostics:
   ui: true
+handoff:
+  # Maximum simultaneous owner-to-owner item transfers. Applied when the plugin starts.
+  capacity: 128

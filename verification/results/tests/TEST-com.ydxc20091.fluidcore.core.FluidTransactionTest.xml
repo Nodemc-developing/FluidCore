@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.core.FluidTransactionTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-01T09:29:25.694Z" hostname="WIN-B5E9U0O0ATH" time="0.014">
+  <properties/>
+  <testcase name="crossingTickRejectsCommitAndRollsBack()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.001"/>
+  <testcase name="simulationAndNetZeroCommitDoNotNotify()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.001"/>
+  <testcase name="allNotificationsRunEvenIfOneFailsAndStateStaysCommitted()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.002"/>
+  <testcase name="nestedRollbackPreservesOuterChanges()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.0"/>
+  <testcase name="directSimulationStillChecksOwnershipAfterFilter()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.001"/>
+  <testcase name="closeWithoutCommitRollsBackAllParticipants()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.0"/>
+  <testcase name="nestedCommitStillRollsBackWithOuter()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.001"/>
+  <testcase name="wrongThreadIsRejectedWithoutChangingStorage()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.002"/>
+  <testcase name="parentCannotMutateWhileChildIsOpen()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.001"/>
+  <testcase name="nestedCommitNotifiesOnlyAfterRootCommit()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.001"/>
+  <testcase name="exceptionRollsBackAndDoesNotPoisonNextTransaction()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.0"/>
+  <testcase name="directSingleTankNotificationFailureStillMeansCommitted()" classname="com.ydxc20091.fluidcore.core.FluidTransactionTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

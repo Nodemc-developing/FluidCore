@@ -1,0 +1,37 @@
+{
+  "project": "folia",
+  "minecraft_target": "26.2",
+  "java": "java version \"25.0.2\" 2026-01-20 LTS\nJava(TM) SE Runtime Environment (build 25.0.2+10-LTS-69)\nJava HotSpot(TM) 64-Bit Server VM (build 25.0.2+10-LTS-69, mixed mode, sharing)",
+  "server": {
+    "local_artifact_sha256": "128a634192261cd38bb4a5dc54075018a0f896fd6c6f529e37dca6e99e32b3b3",
+    "build": 7,
+    "experimental": false
+  },
+  "ce_sha256": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6",
+  "fluidcore_sha256": "5bdbf6e14df64f49abe51ad69c4f1531dd147a3c00a237c538c0d03048095fca",
+  "full": true,
+  "result_label": "author-release",
+  "first_boot": {
+    "pass": true,
+    "failure": null,
+    "markers": [
+      "FLUIDCORE_CE_VERIFY PASS",
+      "FLUIDCORE_STANDARD_API PASS",
+      "FLUIDCORE_VERIFY PASS",
+      "FluidCore 0.1.0-SNAPSHOT"
+    ],
+    "seconds": 15.44,
+    "log": "verification\\results\\folia-26.2-author-release-boot.log"
+  },
+  "restart": {
+    "pass": true,
+    "failure": null,
+    "markers": [
+      "FLUIDCORE_PERSISTENCE PASS"
+    ],
+    "seconds": 11.92,
+    "log": "verification\\results\\folia-26.2-author-release-restart.log"
+  },
+  "pass": true,
+  "author": "ydxc20091"
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-01T09:29:25.505Z" hostname="WIN-B5E9U0O0ATH" time="0.055">
+  <properties/>
+  <testcase name="ingredientMatchesTagAmountAndSubsetComponents()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.015"/>
+  <testcase name="olderVersionMigrationIsExplicitAndLossless()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.009"/>
+  <testcase name="duplicateBatchFailureDoesNotPartiallyPublish()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.003"/>
+  <testcase name="unorderedComponentsHaveDeterministicEncoding()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.002"/>
+  <testcase name="trailingBytesAreRejected()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.001"/>
+  <testcase name="defaultsAndAtomicOwnedReloadPreserveOtherPlugins()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.003"/>
+  <testcase name="unknownFluidAndComponentKeepOriginalRecord()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.005"/>
+  <testcase name="futureFormatIsUnknownAndOriginalBytesArePreserved()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.004"/>
+  <testcase name="malformedAndOversizedRecordsRemainAvailable()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.001"/>
+  <testcase name="legalLookingBitCorruptionIsDetectedByChecksum()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.0"/>
+  <testcase name="emptyAndPlainFluidRoundTrip()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.001"/>
+  <testcase name="malformedKnownComponentFailsWithoutDiscardingOriginalBytes()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.001"/>
+  <testcase name="knownComponentCodecIsValidatedWithoutChangingStoredBytes()" classname="com.ydxc20091.fluidcore.core.FluidRegistryCodecTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

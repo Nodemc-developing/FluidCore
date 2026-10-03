@@ -6,6 +6,8 @@ import com.ydxc20091.fluidcore.core.FluidRegistry;
 import com.ydxc20091.fluidcore.core.FluidStackCodec;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionType;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -68,10 +70,11 @@ public final class ItemFluidContainerRegistry implements AutoCloseable {
         if (definition != null) return Optional.of(new DynamicContainer(one, definition));
         // A CE item whose material happens to be a bucket is never treated as a vanilla bucket.
         if (customItem.test(one)) return Optional.empty();
-        FluidStack vanilla = vanillaContent(one.getType());
+        FluidStack vanilla = vanillaContent(one);
         if (vanilla == null) return Optional.empty();
-        if (hasKey(one, ItemFluidData.DATA_KEY) || hasKey(one, ItemContainerTransfers.TANK_DATA_KEY)
-                || hasKey(one, ItemFluidData.INITIALIZED_KEY)) {
+        var persistentData = one.getPersistentDataContainer();
+        if (persistentData.has(ItemFluidData.DATA_KEY) || persistentData.has(ItemContainerTransfers.TANK_DATA_KEY)
+                || persistentData.has(ItemFluidData.INITIALIZED_KEY) || ForeignFluidData.item(one)) {
             ItemFluidReadResult record = data.read(one);
             if (record.usable()) record = data.conflict(one, "Vanilla bucket carries a FluidCore container/tank record");
             return Optional.of(new ProtectedContainer(one, record));
@@ -181,6 +184,11 @@ public final class ItemFluidContainerRegistry implements AutoCloseable {
         }
         @Override public FluidStack content() { check(); return content; }
         @Override public long capacity() { check(); return definition.capacity(); }
+        @Override public ItemStack item() {
+            check();
+            if (!read.protectedData()) com.ydxc20091.fluidcore.ce.TankItemPresentation.apply(item, content, definition.capacity(), fluids, null);
+            return super.item();
+        }
         @Override public boolean accepts(FluidVariant variant) {
             check(); Objects.requireNonNull(variant);
             return definition.accepts(variant, fluids) && codec.decode(codec.encode(FluidStack.of(variant, 1))).usable();
@@ -206,25 +214,37 @@ public final class ItemFluidContainerRegistry implements AutoCloseable {
     }
     private final class VanillaContainer extends DetachedContainer {
         private FluidStack content;
-        VanillaContainer(ItemStack item, FluidStack content) { super(item); this.content = content; }
+        private final boolean bottle;
+        VanillaContainer(ItemStack item, FluidStack content) {
+            super(item); this.content = content;
+            bottle = item.getType() == Material.GLASS_BOTTLE || item.getType() == Material.POTION || item.getType() == Material.HONEY_BOTTLE;
+        }
         @Override public FluidStack content() { check(); return content; }
-        @Override public long capacity() { check(); return 1000; }
-        @Override public boolean accepts(FluidVariant variant) { check(); return vanillaMaterial(Objects.requireNonNull(variant)) != null; }
+        @Override public long capacity() { check(); return bottle ? 250 : 1000; }
+        @Override public boolean accepts(FluidVariant variant) { check(); return vanillaMaterial(Objects.requireNonNull(variant), bottle) != null; }
         @Override public ItemFluidReadResult readResult() {
             check(); return new ItemFluidReadResult(content.isEmpty() ? ItemFluidReadResult.Status.EMPTY : ItemFluidReadResult.Status.PRESENT,
-                    content, new byte[0], new byte[0], "Vanilla bucket contents", item);
+                    content, new byte[0], new byte[0], "Vanilla container contents", item);
         }
         @Override public long fill(FluidStack offered, FluidAction action) {
             Objects.requireNonNull(offered, "offered"); checkRequest(offered.amount(), action);
-            if (!content.isEmpty() || offered.isEmpty() || offered.amount() < 1000 || !accepts(offered.variant())) return 0;
-            if (action == FluidAction.EXECUTE) { item.setType(vanillaMaterial(offered.variant())); content = FluidStack.of(offered.variant(), 1000); }
-            return 1000;
+            long unit = capacity();
+            if (!content.isEmpty() || offered.isEmpty() || offered.amount() < unit || !accepts(offered.variant())) return 0;
+            if (action == FluidAction.EXECUTE) {
+                item.setType(vanillaMaterial(offered.variant(), bottle));
+                if (item.getType() == Material.POTION) {
+                    PotionMeta meta = (PotionMeta) item.getItemMeta();
+                    meta.setBasePotionType(PotionType.WATER); item.setItemMeta(meta);
+                }
+                content = FluidStack.of(offered.variant(), unit);
+            }
+            return unit;
         }
         @Override public FluidStack drain(FluidVariant variant, long maximum, FluidAction action) {
             Objects.requireNonNull(variant, "variant"); checkRequest(maximum, action);
-            if (content.isEmpty() || !content.variant().equals(variant) || maximum < 1000) return FluidStack.EMPTY;
+            if (content.isEmpty() || !content.variant().equals(variant) || maximum < capacity()) return FluidStack.EMPTY;
             FluidStack result = content;
-            if (action == FluidAction.EXECUTE) { item.setType(Material.BUCKET); content = FluidStack.EMPTY; }
+            if (action == FluidAction.EXECUTE) { item.setType(bottle ? Material.GLASS_BOTTLE : Material.BUCKET); content = FluidStack.EMPTY; }
             return result;
         }
     }
@@ -241,20 +261,25 @@ public final class ItemFluidContainerRegistry implements AutoCloseable {
     private static boolean empty(ItemStack item) {
         return item.getAmount() <= 0 || item.getType() == Material.AIR || item.getType() == Material.CAVE_AIR || item.getType() == Material.VOID_AIR;
     }
-    private static boolean hasKey(ItemStack item, org.bukkit.NamespacedKey key) {
-        return item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(key);
-    }
-    private static FluidStack vanillaContent(Material type) {
-        return switch (type) {
-            case BUCKET -> FluidStack.EMPTY;
+    private static FluidStack vanillaContent(ItemStack item) {
+        return switch (item.getType()) {
+            case BUCKET, GLASS_BOTTLE -> FluidStack.EMPTY;
             case WATER_BUCKET -> FluidStack.of(FluidVariant.of("minecraft:water"), 1000);
             case LAVA_BUCKET -> FluidStack.of(FluidVariant.of("minecraft:lava"), 1000);
             case MILK_BUCKET -> FluidStack.of(FluidVariant.of("minecraft:milk"), 1000);
+            case HONEY_BOTTLE -> FluidStack.of(FluidVariant.of("minecraft:honey"), 250);
+            case POTION -> item.getItemMeta() instanceof PotionMeta potion && potion.getBasePotionType() == PotionType.WATER
+                    && !potion.hasCustomEffects() ? FluidStack.of(FluidVariant.of("minecraft:water"), 250) : null;
             default -> null;
         };
     }
-    private static Material vanillaMaterial(FluidVariant variant) {
+    private static Material vanillaMaterial(FluidVariant variant, boolean bottle) {
         if (!variant.components().isEmpty()) return null;
+        if (bottle) return switch (variant.fluid().toString()) {
+            case "minecraft:water" -> Material.POTION;
+            case "minecraft:honey" -> Material.HONEY_BOTTLE;
+            default -> null;
+        };
         return switch (variant.fluid().toString()) {
             case "minecraft:water" -> Material.WATER_BUCKET;
             case "minecraft:lava" -> Material.LAVA_BUCKET;

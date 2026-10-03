@@ -30,11 +30,15 @@ public final class FluidCorePlugin extends JavaPlugin implements BukkitFluidCore
 
     @Override public void onLoad() {
         registry = new FluidRegistry();
-        bridge = new CraftEngineBridge(this, registry);
-        bridge.register();
         saveResourceIfMissing("config.yml");
-        try { settings = FluidCoreSettings.load(getDataFolder().toPath().resolve("config.yml")); }
+        saveResourceIfMissing("lang.yml");
+        try {
+            settings = FluidCoreSettings.load(getDataFolder().toPath().resolve("config.yml"));
+        }
         catch (Exception failure) { throw new IllegalStateException("Invalid FluidCore configuration; file preserved", failure); }
+        bridge = new CraftEngineBridge(this, registry); bridge.register();
+        try { bridge.messages(com.ydxc20091.fluidcore.config.FluidMessages.load(getDataFolder().toPath().resolve("lang.yml"))); }
+        catch (Exception failure) { throw new IllegalStateException("Invalid FluidCore language configuration; file preserved", failure); }
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
                 event -> event.registrar().register("fluidcore", "FluidCore diagnostics", List.of("fc"), new AdminCommand()));
     }
@@ -43,6 +47,9 @@ public final class FluidCorePlugin extends JavaPlugin implements BukkitFluidCore
         queue = new SnapshotWorkQueue(settings.workers(), settings.queueCapacity());
         ui = new DiagnosticsUi(this);
         bridge.start();
+        bridge.handoffs().inspectRecoveries(4096).thenAccept(entries -> {
+            if (!entries.isEmpty()) getLogger().warning("Preserved " + entries.size() + " handoff journal records; use /fluidcore recovery to inspect uncertain transfers before any manual recovery.");
+        }).exceptionally(failure -> { getLogger().log(Level.WARNING, "Cannot inspect preserved handoff journals", failure); return null; });
         var services = getServer().getServicesManager();
         services.register(BukkitFluidCoreService.class, this, this, ServicePriority.Normal);
         services.register(CraftEngineBridge.class, bridge, this, ServicePriority.Normal);
@@ -99,6 +106,15 @@ public final class FluidCorePlugin extends JavaPlugin implements BukkitFluidCore
                     case "ui" -> {
                         if (sender instanceof Player player) ui.open(player); else reply(sender, "菜单需要玩家使用。");
                     }
+                    case "recovery" -> bridge.handoffs().inspectRecoveries(256).whenComplete((entries, failure) -> {
+                        Runnable notify = () -> {
+                            if (failure != null) { reply(sender, "无法检查交接记录：" + failure.getMessage()); return; }
+                            reply(sender, "保留的交接记录：" + entries.size() + "（仅检查，未重新发放物品）");
+                            for (var entry : entries) reply(sender, entry.id() + " | " + entry.state() + " | " + entry.source() + " -> " + entry.destination() + " | " + entry.itemBytes() + " bytes" + (entry.error().isEmpty() ? "" : " | " + entry.error()));
+                        };
+                        if (sender instanceof Player player) player.getScheduler().run(FluidCorePlugin.this, task -> notify.run(), () -> {});
+                        else getServer().getGlobalRegionScheduler().execute(FluidCorePlugin.this, notify);
+                    });
                     case "fluid" -> {
                         if (args.length != 2) { reply(sender, "/fluidcore fluid namespace:id"); return; }
                         var definition = registry.find(FluidKey.of(args[1]));
@@ -111,7 +127,13 @@ public final class FluidCorePlugin extends JavaPlugin implements BukkitFluidCore
                                 + " | 纹理 " + fluid.texture().orElse("未设置") + " | 声音 " + fluid.properties().sounds());
                     }
                     case "reload" -> reloadSettings(sender);
-                    default -> reply(sender, "/fluidcore status|inspect|fluid|ui|reload");
+                    case "verify" -> verifyCore(sender);
+                    case "verify-ce", "verify-persisted" -> com.ydxc20091.fluidcore.verification.CeVerification
+                            .run(FluidCorePlugin.this, sub.equals("verify-persisted")).whenComplete((message, failure) -> {
+                                if (failure != null) getLogger().log(Level.SEVERE, "FLUIDCORE_CE_VERIFY FAIL", failure);
+                                else getLogger().info(message);
+                            });
+                    default -> reply(sender, "/fluidcore status|inspect|fluid|ui|recovery|reload|verify");
                 }
             } catch (RuntimeException failure) {
                 getLogger().log(Level.WARNING, "FluidCore command failed", failure);
@@ -123,20 +145,23 @@ public final class FluidCorePlugin extends JavaPlugin implements BukkitFluidCore
             if (args.length == 2 && args[0].equalsIgnoreCase("fluid"))
                 return registry.snapshot().fluids().keySet().stream().map(FluidKey::toString)
                         .filter(key -> key.startsWith(args[1])).sorted().toList();
-            return List.of("status", "inspect", "fluid", "ui", "reload").stream().filter(value -> value.startsWith(prefix)).toList();
+            return List.of("status", "inspect", "fluid", "ui", "recovery", "reload", "verify").stream().filter(value -> value.startsWith(prefix)).toList();
         }
     }
 
     private void reloadSettings(CommandSender sender) {
         var prior = queue;
-        prior.submit(() -> FluidCoreSettings.load(getDataFolder().toPath().resolve("config.yml")))
+        record Loaded(FluidCoreSettings settings, com.ydxc20091.fluidcore.config.FluidMessages messages) {}
+        prior.submit(() -> new Loaded(FluidCoreSettings.load(getDataFolder().toPath().resolve("config.yml")),
+                com.ydxc20091.fluidcore.config.FluidMessages.load(getDataFolder().toPath().resolve("lang.yml"))))
                 .whenComplete((loaded, failure) -> {
                     Runnable publish = () -> {
                         if (!isEnabled()) return;
                         if (failure != null) { reply(sender, "配置重载失败，保留旧配置：" + failure.getMessage()); return; }
                         if (queue != prior) { reply(sender, "已有较新的配置重载，跳过本次结果。"); return; }
-                        var replacement = new SnapshotWorkQueue(loaded.workers(), loaded.queueCapacity());
-                        settings = loaded;
+                        var replacement = new SnapshotWorkQueue(loaded.settings().workers(), loaded.settings().queueCapacity());
+                        settings = loaded.settings(); bridge.messages(loaded.messages());
+                        if (settings.handoffCapacity() != bridge.handoffs().capacity()) reply(sender, "handoff.capacity 将在下次插件启动时生效。");
                         queue = replacement;
                         prior.close();
                         reply(sender, "FluidCore 配置已重载；流体包请使用 CE 的重载命令。");
@@ -146,4 +171,21 @@ public final class FluidCorePlugin extends JavaPlugin implements BukkitFluidCore
                 });
     }
 
+    private void verifyCore(CommandSender sender) {
+        var context = StorageContext.confinedToCurrentThread();
+        var source = new FluidTank(4000, context);
+        var destination = new FluidTank(1500, context);
+        var water = FluidVariant.of("minecraft:water");
+        source.fill(FluidStack.of(water, 3000), FluidAction.EXECUTE);
+        FluidTransfers.move(source, destination, water, 2000, FluidAction.SIMULATE);
+        if (source.content(0).amount() != 3000 || !destination.content(0).isEmpty()) throw new IllegalStateException("simulation changed state");
+        FluidTransfers.move(source, destination, water, 2000, FluidAction.EXECUTE);
+        if (source.content(0).amount() != 1500 || destination.content(0).amount() != 1500) throw new IllegalStateException("transfer violated conservation");
+        try (var transaction = FluidTransaction.open()) { source.extract(water, 1000, transaction); }
+        if (source.content(0).amount() != 1500) throw new IllegalStateException("rollback failed");
+        var codec = new FluidStackCodec(registry);
+        var decoded = codec.decode(codec.encode(source.content(0)));
+        if (!decoded.stack().equals(source.content(0))) throw new IllegalStateException("codec round trip failed");
+        reply(sender, "FLUIDCORE_VERIFY PASS: simulation, conservation, rollback, codec, CE service registration");
+    }
 }

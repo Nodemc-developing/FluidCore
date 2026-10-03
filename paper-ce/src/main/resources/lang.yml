@@ -1,0 +1,58 @@
+# Use the player's language for menus and feedback. Carried items use default-language.
+default-language: zh
+zh:
+  tank: 流体储罐
+  empty: 空
+  contains: '包含：{fluid}'
+  amount: '储量：{amount} / {capacity} mB'
+  units: 1 桶 = 1000 mB = 4 瓶
+  input: 投料槽
+  output: 产物槽
+  close: 关闭
+  recipes: 流体配方
+  recipes-hint: 查看灌装、排空与浸泡配方
+  insert: 光标左键放入整叠，右键放入一个；Shift 背包快捷投料
+  take-input: 空光标左键取整叠，右键取一半；Shift 取回背包
+  take-output: 空光标点击领取整叠产物
+  progress: '进度：{percent}%'
+  bucket-count: '当前储量：{count} 桶'
+  bottle-count: '当前储量：{count} 瓶'
+  protected: 数据受保护
+  no-transfer: 无法转移：流体不足、容量不足或类型不匹配。
+  no-space: 背包没有空间，物品和流体均已保留。
+  protected-transfer: 容器数据受保护，物品和流体均已保留。
+  atomic-unsupported: 此容器不支持完整转移，操作已取消。
+  access-rejected: 流体数据受保护或容器暂不可用，操作已取消。
+  transfer-failed: 流体转移未能完成，请查看服务器日志。
+  water: 水
+  milk: 牛奶
+  lava: 岩浆
+  honey: 蜂蜜
+en:
+  tank: Fluid tank
+  empty: Empty
+  contains: 'Contains: {fluid}'
+  amount: 'Stored: {amount} / {capacity} mB'
+  units: 1 bucket = 1000 mB = 4 bottles
+  input: Input
+  output: Output
+  close: Close
+  recipes: Fluid recipes
+  recipes-hint: Browse filling, emptying and soaking recipes
+  insert: Left-click to place a stack, right-click for one; shift-click inventory to insert
+  take-input: 'With an empty cursor: left-click for a stack, right-click for half; shift-click to inventory'
+  take-output: Click with an empty cursor to collect the result stack
+  progress: 'Progress: {percent}%'
+  bucket-count: 'Stored: {count} buckets'
+  bottle-count: 'Stored: {count} bottles'
+  protected: Protected data
+  no-transfer: 'Cannot transfer: insufficient fluid, capacity, or incompatible type.'
+  no-space: No inventory space; the item and fluid were preserved.
+  protected-transfer: Container data is protected; the item and fluid were preserved.
+  atomic-unsupported: This container cannot transfer atomically; the operation was cancelled.
+  access-rejected: Fluid data is protected or the container is unavailable; the operation was cancelled.
+  transfer-failed: The fluid transfer could not complete; check the server log.
+  water: Water
+  milk: Milk
+  lava: Lava
+  honey: Honey

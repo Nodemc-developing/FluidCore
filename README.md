@@ -5,6 +5,11 @@ FluidCore supplies shared fluid data, storage and container operations for addon
 
 Current version: `0.1.0-SNAPSHOT`. The API is still under development.
 
+Latest prerelease: [Build 2](https://github.com/Nodemc-developing/FluidCore/releases/tag/v0.1.0-SNAPSHOT.2).
+Its runtime JAR and matching source archive are identical to those bundled with
+Farmersdelight-Plugin-Pro 1.2.0. See the [release notes](RELEASE-NOTES-0.1.0-SNAPSHOT.2.md)
+for the fixed CraftEngine build, checksums and verification scope.
+
 ## Features
 
 - Immutable fluid identities, stacks and typed components; quantities and capacities use `long`.
@@ -17,10 +22,32 @@ Current version: `0.1.0-SNAPSHOT`. The API is still under development.
 
 One bucket is **1000 mB**. Fluid identity includes its components, so different component values cannot be merged.
 
+Container transfers also work while sneaking. Creative players retain a filled container
+when injecting fluid; extracting into an empty container delivers the filled item and
+deducts the stored amount. Insufficient fluid, capacity or inventory space rolls back the transfer.
+Empty-hand interaction displays stored fluid quantities; failed transfers report their reason.
+
+Tanks can optionally update existing block properties without an idle ticker:
+
+```yaml
+behavior:
+  type: fluidcore:tank
+  capacity: 16000
+  visual:
+    level_property: fluid_level
+    fluid_property: fluid_kind
+```
+
+Declare `fluid_level` as an integer property containing 0 through 16, and `fluid_kind`
+as a string property containing `empty`, `water`, `milk`, `lava`, `honey` and `other`.
+The content pack supplies appearances for those states. Changes refresh the existing
+block and controller; display levels do not round the stored mB quantity. Non-empty
+amounts occupy at least one visible level, and unknown registered fluids use `other`.
+
 ## Requirements and installation
 
 - A compatible Paper or Folia server running CraftEngine 26.10.
-- Java 21 for Minecraft 1.21.x; Java 25 for Minecraft 26.x. FluidCore compiles to Java 21 bytecode.
+- Java 25 for the FluidCore server plugin and optional examples plugin. The API and core developer artifacts use Java 21 bytecode; this does not make the server plugins compatible with Java 21.
 - The pinned **CraftEngine 26.10-SNAPSHOT** build specified by `ceSha256` in [gradle.properties](gradle.properties).
 
 Install CraftEngine and place `FluidCore-0.1.0-SNAPSHOT.jar` in the server's `plugins` directory. Restart the server. Install `FluidCore-Examples-0.1.0-SNAPSHOT.jar` separately if you want the optional example pack.
@@ -86,7 +113,7 @@ Closing without committing restores both tanks. This example uses in-memory stor
 
 Use `fluidcore:fluids` and `fluidcore:fluid-tags` for registration, `fluidcore:container` for item containers, and `fluidcore:tank` for storage blocks. See the [example pack](examples/src/main/resources/pack/configuration/examples.yml) and [API guide](docs/api.md).
 
-Ordinary tanks do not register tickers. Active machines can use CraftEngine's sleeping ticker API: call `sleep()` when idle and `wakeUp()` after relevant changes. Waking a ticker schedules work; it does not immediately execute it. Fluid metadata does not automatically change world physics or lighting.
+Tank controllers use CraftEngine's sleeping ticker API for processors and hopper transfers. They call `sleep()` when idle and `wakeUp()` after relevant changes, so idle tanks do not poll every tick. Waking a ticker schedules work; it does not immediately execute it. Fluid metadata does not automatically change world physics or lighting.
 
 ## License
 

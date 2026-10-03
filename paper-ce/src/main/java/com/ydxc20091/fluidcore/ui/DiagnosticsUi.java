@@ -38,7 +38,7 @@ public final class DiagnosticsUi {
         }
         if (!initialized) {
             synchronized (this) {
-                if (!initialized) { SparrowUI.getInstance().setUp(plugin); initialized = true; }
+                if (!initialized) { FluidUiRuntime.initialize(plugin); initialized = true; }
             }
         }
         var snapshot = plugin.registry().snapshot();
@@ -79,8 +79,8 @@ public final class DiagnosticsUi {
     private StaticItem display(Material material, String title, List<String> lines) {
         ItemStack item = new ItemStack(material);
         item.editMeta(meta -> {
-            meta.displayName(Component.text(title, NamedTextColor.AQUA));
-            meta.lore(lines.stream().map(line -> Component.text(line, NamedTextColor.GRAY)).toList());
+            meta.displayName(UiTextStyle.text(title, UiTextStyle.Role.VALUE));
+            meta.lore(lines.stream().map(line -> UiTextStyle.text(line, UiTextStyle.Role.DESCRIPTION)).toList());
         });
         return new StaticItem(item);
     }

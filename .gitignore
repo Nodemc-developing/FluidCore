@@ -5,5 +5,8 @@
 .idea/
 *.iml
 local.properties
+verification/servers/
+verification/cache/
+verification/downloads/
 dist/
 **/__pycache__/

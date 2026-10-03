@@ -80,6 +80,42 @@ public final class FluidIngredient {
         if (defaultAmount < 0) throw new IllegalArgumentException("Negative default ingredient amount");
         return parse(raw, registry, defaultAmount);
     }
+
+    /** Configuration decoding is explicit: registered codecs, never guessed component bytes. */
+    public static FluidIngredient parseConfiguration(Object raw, FluidRegistry registry, long defaultAmount) {
+        return parse(configuration(raw, registry.snapshot(), 0), registry, defaultAmount);
+    }
+
+    private static Object configuration(Object raw, FluidRegistry.Snapshot registry, int depth) {
+        if (depth > 32) throw new IllegalArgumentException("Fluid alternatives are nested too deeply");
+        if (raw instanceof Collection<?> alternatives) {
+            if (alternatives.isEmpty() || alternatives.size() > 256) throw new IllegalArgumentException("Fluid alternatives must contain 1..256 entries");
+            return alternatives.stream().map(value -> configuration(value, registry, depth + 1)).toList();
+        }
+        if (!(raw instanceof Map<?, ?> source)) return raw;
+        Map<String, Object> map = new LinkedHashMap<>();
+        source.forEach((key, value) -> {
+            String name = String.valueOf(key);
+            if (!name.startsWith("x-") && !name.equals("extensions")) map.put(name, value);
+        });
+        if (map.containsKey("id")) {
+            if (map.containsKey("fluid")) throw new IllegalArgumentException("Specify fluid or id, not both");
+            map.put("fluid", map.remove("id"));
+        }
+        if (map.containsKey("any-of")) map.put("any-of", configuration(map.get("any-of"), registry, depth + 1));
+        if (map.get("components") instanceof Map<?, ?> values) {
+            if (values.size() > 64) throw new IllegalArgumentException("Too many required fluid components");
+            Map<FluidKey, ComponentValue> encoded = new LinkedHashMap<>();
+            values.forEach((key, value) -> {
+                FluidKey id = identifier(key, "component key");
+                ComponentCodec<?> codec = registry.componentCodecs().get(id);
+                if (codec == null) throw new IllegalArgumentException("Unregistered fluid component codec: " + id);
+                encoded.put(id, ComponentValue.of(codec.encodeConfiguration(value instanceof ComponentValue component ? component.bytes() : value)));
+            });
+            map.put("components", encoded);
+        }
+        return map;
+    }
     private static FluidIngredient parse(Object raw, FluidRegistry registry, long defaultAmount) {
         Objects.requireNonNull(raw, "raw"); Objects.requireNonNull(registry, "registry");
         if (raw instanceof FluidIngredient ingredient) return ingredient.withAmount(defaultAmount == 0 ? ingredient.amount() : defaultAmount);

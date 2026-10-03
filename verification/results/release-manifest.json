@@ -1,0 +1,50 @@
+{
+  "project": "FluidCore",
+  "author": "ydxc20091",
+  "package_prefix": "com.ydxc20091.fluidcore",
+  "maven_group": "com.ydxc20091.fluidcore",
+  "version": "0.1.0-SNAPSHOT",
+  "revision": "author-release",
+  "release_kind": "local-open-source-candidate",
+  "verified_on": "2026-10-01",
+  "ce_sha256": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6",
+  "artifacts": {
+    "api-0.1.0-SNAPSHOT-sources.jar": "1087b9135a13f48c758ee1abaad78dde573e52b1639cecab04b6b698fe038fb2",
+    "api-0.1.0-SNAPSHOT.jar": "8cd07dd8fd49f5108fdcd48f6ec9083ec7f663207b714ff7116f7c8b934e83d4",
+    "core-0.1.0-SNAPSHOT-sources.jar": "37af2c51aa8e1dd3b5e997684c88d7ae1a7f508a08f9aee629129d28434a6906",
+    "core-0.1.0-SNAPSHOT.jar": "7c35d5e073a8fb404d9f030b537b2251b975ed933bf4c7c6e0784dbe0df8f651",
+    "FluidCore-0.1.0-SNAPSHOT.jar": "5bdbf6e14df64f49abe51ad69c4f1531dd147a3c00a237c538c0d03048095fca",
+    "FluidCore-Examples-0.1.0-SNAPSHOT.jar": "05df11ab5e4f18e774b2bffa7f7be53b7ac73c2c94c9c0bbb6b305d76009ee0c"
+  },
+  "unit_tests": {
+    "passed": 136,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": 12
+  },
+  "full_server_results": [
+    "verification/results/server-paper-1.21.4-author-release.json",
+    "verification/results/server-paper-1.21.11-author-release.json",
+    "verification/results/server-paper-26.3-author-release.json",
+    "verification/results/server-folia-1.21.4-author-release.json",
+    "verification/results/server-folia-26.2-author-release.json"
+  ],
+  "full_server_combinations": [
+    "paper-1.21.4",
+    "paper-1.21.11",
+    "paper-26.3",
+    "folia-1.21.4",
+    "folia-26.2"
+  ],
+  "java_bytecode_major": 65,
+  "own_runtime_classes_checked": 116,
+  "api_frozen": false,
+  "maven_local_consumer_compiled": true,
+  "maven_local_consumer_executed": true,
+  "licenses": {
+    "api": "Apache-2.0",
+    "implementation": "GPL-3.0-only",
+    "dependencies": "THIRD-PARTY-NOTICES.md"
+  }
+}
