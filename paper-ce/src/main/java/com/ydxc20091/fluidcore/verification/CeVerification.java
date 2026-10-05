@@ -80,14 +80,14 @@ public final class CeVerification {
                     var passiveEntity = passive.blockEntity();
                     var passiveTicker = passive.createBlockEntityTicker(passiveEntity.world,
                             CraftEngineBlocks.getCustomBlockState(world.getBlockAt(tankPosition)));
-                    require(passiveTicker != null && passiveTicker.isSleeping(),
+                    require(passiveTicker != null && passive.tickerSleeping(),
                             "Idle tank did not sleep after native ticks");
                     var expectedTankContent = FluidStack.of(water, 3000);
                     require(passive.storage().content(0).equals(expectedTankContent),
                             "Idle native tank changed its preserved content");
                     require(passive.storage().fill(FluidStack.of(water, 1), FluidAction.EXECUTE) == 1,
                             "Tank wake-up commit failed");
-                    require(!passiveTicker.isSleeping(), "A successful tank commit did not wake its ticker");
+                    require(!passive.tickerSleeping(), "A successful tank commit did not wake its ticker");
                     require(passive.storage().drain(water, 1, FluidAction.EXECUTE).amount() == 1,
                             "Tank wake-up fixture did not restore its preserved content");
                     var heater = plugin.bridge().resolver().controller(heaterPosition).orElseThrow();
@@ -100,7 +100,7 @@ public final class CeVerification {
                     require(sleeping(ticking[0]), "Empty heater did not sleep");
                     Bukkit.getRegionScheduler().runDelayed(plugin, heaterPosition, task2 -> {
                         try {
-                            require(passiveTicker.isSleeping(), "Idle tank did not return to sleep after its commit");
+                            require(passive.tickerSleeping(), "Idle tank did not return to sleep after its commit");
                             require(passive.storage().content(0).equals(expectedTankContent),
                                     "Sleeping tank changed fluid after its commit");
                             require(tickCount(ticking[0]) == count, "Sleeping heater kept executing");

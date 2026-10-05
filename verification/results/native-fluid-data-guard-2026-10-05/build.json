@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-05",
+  "status": "build-and-unit-tests-passed-consumer-native-checks-pending",
+  "jar_sha256": "ae4c584cf18c1c11d716fed395bb8cdcdf05a204d1fcb68b784128220933f04a",
+  "previous_candidate_sha256": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+  "change": "Protect unknown container payloads by namespace-independent local jug/jug_* keys and existing generic fluid/liquid/tank_data markers. Owned FluidCore keys remain handled by their own codecs. Payloads stay opaque and unchanged.",
+  "scope": "Only generic foreign-data classification; no transaction, recipe, storage, menu or matching-engine changes.",
+  "release": 21,
+  "ce_baseline_sha256": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa",
+  "ce_native_adapter_sha256": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6",
+  "tests": {
+    "core": {
+      "tests": 73,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "paper-ce": {
+      "tests": 221,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "test_execution": {
+    "paper-ce": "executed on Java 21 with CE 26.9.2 runtime",
+    "core": "unchanged module; Gradle reused the passing 73-test result"
+  },
+  "new_tests": [
+    "Namespace-independent key protection and benign unrelated keys",
+    "Owned FluidCore keys are not foreign",
+    "Opaque compound traversal preserves all values",
+    "Owned compound internals are not foreign"
+  ],
+  "expanded_regression": "Existing vanilla bucket/bottle foreign-data test now includes arbitrary namespaces with jug and jug_contents; fill/drain remain refused and caller item snapshots remain unchanged.",
+  "verification_directory": "tests",
+  "not_executed": [
+    "No server was started for this build; consumer native validation is tracked separately",
+    "No real client, menu, protection-plugin or performance checks"
+  ]
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:29.237Z" hostname="WIN-B5E9U0O0ATH" time="0.005">
+  <properties/>
+  <testcase name="staleExpectedValueAndOversizedReplacementNeverEditTheSlot()" classname="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" time="0.001"/>
+  <testcase name="armorSlotsCannotBeAccidentallyAddressedAsStorage()" classname="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" time="0.0"/>
+  <testcase name="foreignReplacementSurvivesValidationFailureAndRollback()" classname="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" time="0.001"/>
+  <testcase name="rejectedSecondHalfOfSwapRollsBackTheFirstExactReplacement()" classname="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" time="0.0"/>
+  <testcase name="crossingTickRejectsCommitAndRestoresTheSource()" classname="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" time="0.001"/>
+  <testcase name="currentReturnsACloneOfTheWholeSelectedItem()" classname="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" time="0.0"/>
+  <testcase name="nestedConflictRemainsProtectedDuringOuterRollback()" classname="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" time="0.0"/>
+  <testcase name="explicitOffhandReplacementCommitsOnlyOnceWithDetachedMetadata()" classname="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" time="0.001"/>
+  <testcase name="ownerCheckRunsBeforeAnyPlayerInventoryRead()" classname="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" time="0.0"/>
+  <testcase name="writeFailureAfterMutationStillRollsBackTheSelectedSlot()" classname="com.ydxc20091.fluidcore.ui.PlayerSlotParticipantTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

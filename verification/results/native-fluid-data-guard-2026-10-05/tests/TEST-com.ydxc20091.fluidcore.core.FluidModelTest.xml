@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.core.FluidModelTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-04T14:25:01.016Z" hostname="WIN-B5E9U0O0ATH" time="0.009">
+  <properties/>
+  <testcase name="emptyIsCanonicalAndNegativeAmountsAreRejected()" classname="com.ydxc20091.fluidcore.core.FluidModelTest" time="0.002"/>
+  <testcase name="namespacedKeysValidateAndRoundTrip()" classname="com.ydxc20091.fluidcore.core.FluidModelTest" time="0.002"/>
+  <testcase name="encodedComponentsAreDeeplyImmutable()" classname="com.ydxc20091.fluidcore.core.FluidModelTest" time="0.002"/>
+  <testcase name="variantsIncludeComponentIdentity()" classname="com.ydxc20091.fluidcore.core.FluidModelTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

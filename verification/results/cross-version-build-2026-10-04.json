@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-04",
+  "status": "build-and-unit-tests-passed-runtime-verification-pending",
+  "compiler_jdk_major": 25,
+  "release": 21,
+  "paper_api": "1.21-R0.1-SNAPSHOT",
+  "test_java_major": 21,
+  "ce_sha256": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa",
+  "jar": "E:\\DevCaches\\FluidCoreBuild\\paper-ce\\libs\\FluidCore-0.1.0-SNAPSHOT.jar",
+  "jar_sha256": "75c6a63252f1e2b2de593ae6390d3b5bb839463a6ef41146d83dd6744fa194d4",
+  "maximum_class_major": 65,
+  "tests": {
+    "core": {
+      "tests": 73,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "paper-ce": {
+      "tests": 214,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "runtime_servers_started": 0,
+  "pending": [
+    "Native CE component codec round trip",
+    "Real client tank clicks and recipe return on 1.21-1.21.3",
+    "Registered shared server cross-version verification for both CE versions",
+    "Legacy content pack model mappings"
+  ],
+  "nested_proxy_maximum_class_major": 65,
+  "ce_snapshot_sha256": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6",
+  "snapshot_runtime_platform_tests": {
+    "tests": 214,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "optional_native_references": "Only ce/nativeapi; stable provider signatures use CE26.9.2 classes"
+}

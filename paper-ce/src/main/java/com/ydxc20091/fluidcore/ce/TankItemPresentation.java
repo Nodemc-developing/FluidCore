@@ -62,7 +62,7 @@ public final class TankItemPresentation {
         Integer shell = meta.getPersistentDataContainer().get(new NamespacedKey("fluidcore", "glass_color"), PersistentDataType.INTEGER);
         int fluidColor = content.isEmpty() ? 0xffffff : registry.find(content.variant().fluid()).map(definition -> definition.color().orElse(0xff9966bf)).orElse(0xff9966bf);
         TankRenderState.colors(item, shell == null ? 0xffffff : shell, fluidColor);
-        if (modelPrefix != null && !modelPrefix.isBlank()) {
+        if (com.ydxc20091.fluidcore.bukkit.ServerCapabilities.modernItems() && modelPrefix != null && !modelPrefix.isBlank()) {
             FluidTankVisualState state = FluidTankVisualState.of(content, capacity);
             if (state.level() == 0) wrapped.itemModel(modelPrefix + "/empty");
             else wrapped.itemModel(modelPrefix + "/level_" + String.format(Locale.ROOT, "%02d", state.level()));

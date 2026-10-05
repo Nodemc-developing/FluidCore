@@ -1,0 +1,38 @@
+{
+  "time": "2026-10-04T16:55:26.269807+00:00",
+  "profile_id": "4a459f864d7f",
+  "environment": "folia-26.2",
+  "physical_path": "E:\\DevCaches\\UAACrossVersionServers\\20261004T120339Z-12632d\\folia-26.2",
+  "core_build": "26.2-7-14b7fee",
+  "java": "C:\\Users\\Ydxc\\.jdks\\jdk-25.0.3+9\\bin\\java.exe",
+  "craft_engine": "26.9.2",
+  "port": "25690",
+  "original_plugins": {
+    "UaaCrossVersionVerification.jar": "1259f64c145e532bc4c335059c109bd9168ab9af5f4c9c437a4690ee35fd08c2",
+    "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589"
+  },
+  "deployed_plugins": {
+    "Farmersdelight-Plugin-Pro.jar": {
+      "source": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\build\\libs\\Farmersdelight-Plugin-Pro-1.2.1.jar",
+      "sha256": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932"
+    },
+    "FluidCore.jar": {
+      "source": "E:\\出售的插件\\FluidCore\\.local\\compatibility-artifacts-water-bottle-fix\\FluidCore-0.1.0-SNAPSHOT.jar",
+      "sha256": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91"
+    },
+    "UltimateAdvancementAPI.jar": {
+      "source": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\libs\\UltimateAdvancementAPI-Plugin-2.8.1-pro.3.jar",
+      "sha256": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589"
+    },
+    "FdVersionVerification.jar": {
+      "source": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\.local\\version-compatibility\\FdVersionVerification.jar",
+      "sha256": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91"
+    },
+    "CraftEngine.jar": {
+      "source": "E:\\下载\\craft-engine-paper-plugin-26.9.2.jar",
+      "sha256": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa"
+    }
+  },
+  "limits": "Headless native correctness only; no real client/network delivery or performance benchmark",
+  "seeded_ce_runtime_jars": 78
+}

@@ -159,7 +159,8 @@ class ItemFluidContainersTest {
         for (Material material : List.of(Material.BUCKET, Material.WATER_BUCKET, Material.LAVA_BUCKET,
                 Material.MILK_BUCKET, Material.GLASS_BOTTLE, Material.HONEY_BOTTLE)) {
             for (NamespacedKey key : List.of(new NamespacedKey("libuid", "saved_jug"),
-                    new NamespacedKey("jug_color", "data"), new NamespacedKey("third_party", "opaque_fluid"))) {
+                    new NamespacedKey("jug_color", "data"), new NamespacedKey("third_party", "opaque_fluid"),
+                    new NamespacedKey("addon", "jug"), new NamespacedKey("another", "jug_contents"))) {
                 var original = new DataStack(material, 3);
                 original.getItemMeta().getPersistentDataContainer().set(key, PersistentDataType.STRING, "opaque-preserved");
                 ItemStack before = original.clone();

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.ce.FluidContentMenuDefaultsTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:29.093Z" hostname="WIN-B5E9U0O0ATH" time="0.004">
+  <properties/>
+  <testcase name="explicitNullAndUnknownFieldsRemainAvailableForTypedValidation()" classname="com.ydxc20091.fluidcore.ce.FluidContentMenuDefaultsTest" time="0.002"/>
+  <testcase name="loadingDefaultsPreserveExplicitValuesAndDoNotShareSourceDocuments()" classname="com.ydxc20091.fluidcore.ce.FluidContentMenuDefaultsTest" time="0.0"/>
+  <testcase name="aScalarMenuIsRejectedAtTheActualConfigurationPath()" classname="com.ydxc20091.fluidcore.ce.FluidContentMenuDefaultsTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

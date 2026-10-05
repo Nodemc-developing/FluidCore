@@ -1,0 +1,582 @@
+{
+  "date": "2026-10-05",
+  "batch_id": "20261004T165349Z",
+  "status": "all-fixed-native-combinations-passed",
+  "source_batch": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\.local\\version-compatibility\\reports\\20261004T165349Z",
+  "artifact": {
+    "name": "FluidCore-0.1.0-SNAPSHOT.jar",
+    "sha256": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91"
+  },
+  "scope": "Joint native correctness verification with Farmersdelight-Plugin-Pro and UltimateAdvancementAPI; total checks include consumer features, not independent FluidCore tests.",
+  "counts": {
+    "runs": 14,
+    "registered_profiles": 7,
+    "native_pass": 266,
+    "additional_log_pass": 28,
+    "total_pass": 294
+  },
+  "skip_policy": "SKIP is preserved in captured reports and excluded from pass totals. Includes real-client checks and early-version native ingredient limitations.",
+  "fluid_native_coverage": [
+    "Detached native bucket 1000 mB and bottle 250 mB SIMULATE/EXECUTE, unchanged caller items",
+    "Native ItemStack bytes restore water bottle and CE tank 3750/16000 mB, count/full metadata/fluid/capacity/CE ID/glass-color PDC",
+    "999 mB source and full destination reject transfers with conservation",
+    "Integer CustomModelData preservation on early versions; modern two-color update preserves additional colors/floats/flags/strings/unrelated PDC",
+    "Paper 1.21 empty native custom-effects list remains a plain water bottle; nonempty effects and non-water bases remain rejected"
+  ],
+  "not_verified": [
+    "Real player menu/inventory clicks and full-backpack transactions",
+    "Cross-Folia-region player transactions and hoppers",
+    "Current world controller placement/loot and complete save/restart",
+    "Real client models/rendering and connection packet delivery",
+    "Protection plugin combinations",
+    "Performance benchmarks",
+    "Every exact patch/core version between 1.21 and 26.3"
+  ],
+  "restoration_record": "restore-proof.json",
+  "runs": [
+    {
+      "environment": "paper-1.21.11",
+      "craft_engine": "26.9.2",
+      "core_build": "1.21.11-132-c5eb079",
+      "java": "21.0.6",
+      "profile_id": "94e5ce5bfc1a",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:54:15.264108+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa"
+      },
+      "report": "paper-1.21.11-ce-26.9.2/report.json",
+      "environment_record": "paper-1.21.11-ce-26.9.2/environment.json",
+      "runner_record": "paper-1.21.11-ce-26.9.2/result.json"
+    },
+    {
+      "environment": "paper-1.21.11",
+      "craft_engine": "26.10",
+      "core_build": "1.21.11-132-c5eb079",
+      "java": "21.0.6",
+      "profile_id": "94e5ce5bfc1a",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:54:41.413536+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6"
+      },
+      "report": "paper-1.21.11-ce-26.10/report.json",
+      "environment_record": "paper-1.21.11-ce-26.10/environment.json",
+      "runner_record": "paper-1.21.11-ce-26.10/result.json"
+    },
+    {
+      "environment": "paper-26.3",
+      "craft_engine": "26.9.2",
+      "core_build": "26.3-140-977da0d",
+      "java": "25.0.3",
+      "profile_id": "6519bf8fd521",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:55:04.359104+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa"
+      },
+      "report": "paper-26.3-ce-26.9.2/report.json",
+      "environment_record": "paper-26.3-ce-26.9.2/environment.json",
+      "runner_record": "paper-26.3-ce-26.9.2/result.json"
+    },
+    {
+      "environment": "paper-26.3",
+      "craft_engine": "26.10",
+      "core_build": "26.3-140-977da0d",
+      "java": "25.0.3",
+      "profile_id": "6519bf8fd521",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:55:25.175067+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6"
+      },
+      "report": "paper-26.3-ce-26.10/report.json",
+      "environment_record": "paper-26.3-ce-26.10/environment.json",
+      "runner_record": "paper-26.3-ce-26.10/result.json"
+    },
+    {
+      "environment": "folia-26.2",
+      "craft_engine": "26.9.2",
+      "core_build": "26.2-7-14b7fee",
+      "java": "25.0.3",
+      "profile_id": "4a459f864d7f",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:55:47.138429+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa"
+      },
+      "report": "folia-26.2-ce-26.9.2/report.json",
+      "environment_record": "folia-26.2-ce-26.9.2/environment.json",
+      "runner_record": "folia-26.2-ce-26.9.2/result.json"
+    },
+    {
+      "environment": "folia-26.2",
+      "craft_engine": "26.10",
+      "core_build": "26.2-7-14b7fee",
+      "java": "25.0.3",
+      "profile_id": "4a459f864d7f",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:56:07.046195+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6"
+      },
+      "report": "folia-26.2-ce-26.10/report.json",
+      "environment_record": "folia-26.2-ce-26.10/environment.json",
+      "runner_record": "folia-26.2-ce-26.10/result.json"
+    },
+    {
+      "environment": "folia-1.21.4",
+      "craft_engine": "26.9.2",
+      "core_build": "1.21.4-6-b785bcc",
+      "java": "21.0.6",
+      "profile_id": "ad64a1a701a6",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:56:35.329487+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa"
+      },
+      "report": "folia-1.21.4-ce-26.9.2/report.json",
+      "environment_record": "folia-1.21.4-ce-26.9.2/environment.json",
+      "runner_record": "folia-1.21.4-ce-26.9.2/result.json"
+    },
+    {
+      "environment": "folia-1.21.4",
+      "craft_engine": "26.10",
+      "core_build": "1.21.4-6-b785bcc",
+      "java": "21.0.6",
+      "profile_id": "ad64a1a701a6",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:57:01.503452+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6"
+      },
+      "report": "folia-1.21.4-ce-26.10/report.json",
+      "environment_record": "folia-1.21.4-ce-26.10/environment.json",
+      "runner_record": "folia-1.21.4-ce-26.10/result.json"
+    },
+    {
+      "environment": "paper-1.21",
+      "craft_engine": "26.9.2",
+      "core_build": "1.21-130-b1b5d4c",
+      "java": "21.0.6",
+      "profile_id": "50da503b9875",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 2
+      },
+      "additional_log_counts": {
+        "PASS": 2,
+        "SKIP": 1
+      },
+      "finished": "2026-10-04T16:57:25.586416+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa"
+      },
+      "report": "paper-1.21-ce-26.9.2/report.json",
+      "environment_record": "paper-1.21-ce-26.9.2/environment.json",
+      "runner_record": "paper-1.21-ce-26.9.2/result.json"
+    },
+    {
+      "environment": "paper-1.21",
+      "craft_engine": "26.10",
+      "core_build": "1.21-130-b1b5d4c",
+      "java": "21.0.6",
+      "profile_id": "50da503b9875",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 2
+      },
+      "additional_log_counts": {
+        "PASS": 2,
+        "SKIP": 1
+      },
+      "finished": "2026-10-04T16:57:49.864231+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6"
+      },
+      "report": "paper-1.21-ce-26.10/report.json",
+      "environment_record": "paper-1.21-ce-26.10/environment.json",
+      "runner_record": "paper-1.21-ce-26.10/result.json"
+    },
+    {
+      "environment": "paper-1.21.3",
+      "craft_engine": "26.9.2",
+      "core_build": "1.21.3-83-d6c81da",
+      "java": "21.0.6",
+      "profile_id": "ef5e2f1fc6ec",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 2
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:58:14.065280+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa"
+      },
+      "report": "paper-1.21.3-ce-26.9.2/report.json",
+      "environment_record": "paper-1.21.3-ce-26.9.2/environment.json",
+      "runner_record": "paper-1.21.3-ce-26.9.2/result.json"
+    },
+    {
+      "environment": "paper-1.21.3",
+      "craft_engine": "26.10",
+      "core_build": "1.21.3-83-d6c81da",
+      "java": "21.0.6",
+      "profile_id": "ef5e2f1fc6ec",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 2
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:58:38.278858+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6"
+      },
+      "report": "paper-1.21.3-ce-26.10/report.json",
+      "environment_record": "paper-1.21.3-ce-26.10/environment.json",
+      "runner_record": "paper-1.21.3-ce-26.10/result.json"
+    },
+    {
+      "environment": "paper-1.21.4",
+      "craft_engine": "26.9.2",
+      "core_build": "1.21.4-232-12d8fe0",
+      "java": "21.0.6",
+      "profile_id": "abbb001e95c7",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:59:02.449512+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa"
+      },
+      "report": "paper-1.21.4-ce-26.9.2/report.json",
+      "environment_record": "paper-1.21.4-ce-26.9.2/environment.json",
+      "runner_record": "paper-1.21.4-ce-26.9.2/result.json"
+    },
+    {
+      "environment": "paper-1.21.4",
+      "craft_engine": "26.10",
+      "core_build": "1.21.4-232-12d8fe0",
+      "java": "21.0.6",
+      "profile_id": "abbb001e95c7",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "finished": "2026-10-04T16:59:26.656624+00:00",
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "e2dfdd1222951b6cbeb6e39e0db10e383079feb604130f17018a6e479e12a932",
+        "FluidCore.jar": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "8850be8847d5a6c18790e84cc161fe297a0d01f5e676e9792d432ae598a32c91",
+        "CraftEngine.jar": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6"
+      },
+      "report": "paper-1.21.4-ce-26.10/report.json",
+      "environment_record": "paper-1.21.4-ce-26.10/environment.json",
+      "runner_record": "paper-1.21.4-ce-26.10/result.json"
+    }
+  ],
+  "captured_records": [
+    {
+      "path": "folia-1.21.4-ce-26.10/environment.json",
+      "sha256": "95d1692de11a2dca045a011cf3e1710db2e3907bdeebc9d85eb41b3d3207817e"
+    },
+    {
+      "path": "folia-1.21.4-ce-26.10/report.json",
+      "sha256": "69feb06aee003a706f875ba68456cd209427ae5caacb309dba7ab2355fab31f2"
+    },
+    {
+      "path": "folia-1.21.4-ce-26.10/result.json",
+      "sha256": "08d53d678f2bc91aee74390579aa4988c71da5092d7ebf55591f8b67a915d2fa"
+    },
+    {
+      "path": "folia-1.21.4-ce-26.9.2/environment.json",
+      "sha256": "329fd7639081b4e22cb3daee933ebbc87cfffaeff3afef162c7f3cb036fa7f3c"
+    },
+    {
+      "path": "folia-1.21.4-ce-26.9.2/report.json",
+      "sha256": "98f898e33ef24faef5eb08c5cee9ee4eb654665000c9d8c8e26ffeb851e45f55"
+    },
+    {
+      "path": "folia-1.21.4-ce-26.9.2/result.json",
+      "sha256": "497ec78741dfe3615cf3ef4fe69cfe516a2e67786b95798b7d74f2fab62a3037"
+    },
+    {
+      "path": "folia-26.2-ce-26.10/environment.json",
+      "sha256": "48c9758b85f9692e44d9cbed1c67803657fd412582fdac461c722c58fff3ff0e"
+    },
+    {
+      "path": "folia-26.2-ce-26.10/report.json",
+      "sha256": "78f12c8e3b496582a7054b413e9379b1daf878286dc5c67a7cee95aeff6f2428"
+    },
+    {
+      "path": "folia-26.2-ce-26.10/result.json",
+      "sha256": "c0904fb1682ea106b035117e7980e2ac815c149d7ecc91ac3228de1ba3da3f48"
+    },
+    {
+      "path": "folia-26.2-ce-26.9.2/environment.json",
+      "sha256": "07d8aa320994753900eff98ecbd8427a0835a3eb3240589ee9cf33cfa141110d"
+    },
+    {
+      "path": "folia-26.2-ce-26.9.2/report.json",
+      "sha256": "bbbe9a348c7019c93d52858b31f619e407cbffef900de7caa8a732ac67ad5f6a"
+    },
+    {
+      "path": "folia-26.2-ce-26.9.2/result.json",
+      "sha256": "c0327e378e1e32add38284f423970f32d30930225e77c017b3874b16a3675849"
+    },
+    {
+      "path": "paper-1.21-ce-26.10/environment.json",
+      "sha256": "53d1fb224fd53f31366bd841b823e540562f0c017cf4c15fc6a1d2232898d995"
+    },
+    {
+      "path": "paper-1.21-ce-26.10/report.json",
+      "sha256": "fd12620d70b523fccfaba82d3adfb752792900990ad2d86982944140ce7342bc"
+    },
+    {
+      "path": "paper-1.21-ce-26.10/result.json",
+      "sha256": "42c07f22a829ce7a878703d460f694a894417eba63e67c2e89415de1b81d54ce"
+    },
+    {
+      "path": "paper-1.21-ce-26.9.2/environment.json",
+      "sha256": "dfd388210eeb0af36d114a508f6f4bfc5c8431d1ea9405cebefc574c06747869"
+    },
+    {
+      "path": "paper-1.21-ce-26.9.2/report.json",
+      "sha256": "352ccadd9fbc23a6327881b9decf71639900657638ad976c7e2e4521937570d5"
+    },
+    {
+      "path": "paper-1.21-ce-26.9.2/result.json",
+      "sha256": "46d593a751a208b180464b9a44e03a9d1686d83980f051d4e9e9bd9189525e7d"
+    },
+    {
+      "path": "paper-1.21.11-ce-26.10/environment.json",
+      "sha256": "7342d6084e3b690f2816047aa86a7206ef576c50c08ec16536e768407c4d6080"
+    },
+    {
+      "path": "paper-1.21.11-ce-26.10/report.json",
+      "sha256": "da0b1b6d4f438fe4b5e81ee1121a229f35cbc46426ae1e7b8b5ea830161f9b70"
+    },
+    {
+      "path": "paper-1.21.11-ce-26.10/result.json",
+      "sha256": "847d3ed02dd313f53a40e10202dfcb332fd92c5f1586b81d81dff51192acc4b2"
+    },
+    {
+      "path": "paper-1.21.11-ce-26.9.2/environment.json",
+      "sha256": "bb8739847a6c6d1b2b3f12e53c4cf6dc64788f365c8c57bf923700fdfa87c857"
+    },
+    {
+      "path": "paper-1.21.11-ce-26.9.2/report.json",
+      "sha256": "e991f25e3d23ac12b3f8164c9249fa6cd6fb8855d6f9822af185e5f65e58dcfe"
+    },
+    {
+      "path": "paper-1.21.11-ce-26.9.2/result.json",
+      "sha256": "f71f02511da876cdb6cad6004db7791ce3b96b6d8a7bdb21c3be3a31ec59bef2"
+    },
+    {
+      "path": "paper-1.21.3-ce-26.10/environment.json",
+      "sha256": "c10694c4bbe7af48ebb1a17fe5ccf16484d2ef159b971274b36fc425dfa1931e"
+    },
+    {
+      "path": "paper-1.21.3-ce-26.10/report.json",
+      "sha256": "12d2b333897351f520836d98410aff7eeca662257591c2510cc414a3c6dbb46c"
+    },
+    {
+      "path": "paper-1.21.3-ce-26.10/result.json",
+      "sha256": "54ab089fab68d196f6a7cd684162f5361033d3e833d2d843ca596f91236047b9"
+    },
+    {
+      "path": "paper-1.21.3-ce-26.9.2/environment.json",
+      "sha256": "00eeb832036987d23235466df2ad8ba4712831f176387c08fe51b07047314512"
+    },
+    {
+      "path": "paper-1.21.3-ce-26.9.2/report.json",
+      "sha256": "69951cfa121d2b95c4482e53763cfce86eb7e2bfd5bb5d5f330d3c6c2f7ff4e9"
+    },
+    {
+      "path": "paper-1.21.3-ce-26.9.2/result.json",
+      "sha256": "f17cb28a3b337d2f1517735079f4a05f5cc565973d853857d356aa1c1ef40d82"
+    },
+    {
+      "path": "paper-1.21.4-ce-26.10/environment.json",
+      "sha256": "d374032cda394daa1e6b107d5d5a3a00e994a0f33b26c3e104cdd7404a790640"
+    },
+    {
+      "path": "paper-1.21.4-ce-26.10/report.json",
+      "sha256": "69ba82689bdb06eda86a674a0702e3517aa3471fe9877e6d215ead34e16cdb16"
+    },
+    {
+      "path": "paper-1.21.4-ce-26.10/result.json",
+      "sha256": "31a2dfeaffe572b7bffa0005e2c62485a43fa775a056d3c17772f38a85c7b28c"
+    },
+    {
+      "path": "paper-1.21.4-ce-26.9.2/environment.json",
+      "sha256": "50059782f469cb298fbe87ec870dd6bcc1652d17f9f22587d56a750cdfce4c0a"
+    },
+    {
+      "path": "paper-1.21.4-ce-26.9.2/report.json",
+      "sha256": "cbe8533ad2acb75606f32b41cef7a52f9a3c65e0da35a45844158ee8dfa86d0a"
+    },
+    {
+      "path": "paper-1.21.4-ce-26.9.2/result.json",
+      "sha256": "e38bc69ea6e9804e107e156c05fdf1f9a0580f92d92439b3d3aa0070d3c85f0d"
+    },
+    {
+      "path": "paper-26.3-ce-26.10/environment.json",
+      "sha256": "34bcf368856bc3069644488450b877c78ac1a5d97c4e5fc1f698c61ce58d1287"
+    },
+    {
+      "path": "paper-26.3-ce-26.10/report.json",
+      "sha256": "0eebbcc1163b1b86b1f543d01a51aa4392ec7b421e867a5f026ffc3ced57e46f"
+    },
+    {
+      "path": "paper-26.3-ce-26.10/result.json",
+      "sha256": "e655f156358fbdb999270a15ccc9477746524584383dcee8b2b9953501ecab41"
+    },
+    {
+      "path": "paper-26.3-ce-26.9.2/environment.json",
+      "sha256": "9f103921646ecc3541bf48dfc522284b94e3849d6ffe1c4e5f85e340673f8eb5"
+    },
+    {
+      "path": "paper-26.3-ce-26.9.2/report.json",
+      "sha256": "1e2e063606a8b67269d3e98fdb7a2e746401eee78ed5ee28299a640e12379f81"
+    },
+    {
+      "path": "paper-26.3-ce-26.9.2/result.json",
+      "sha256": "02a41243c7fd2cfa2edbba8f5bbbc41df9d3eac7d95da19dad9f37f06b500a94"
+    },
+    {
+      "path": "restore-proof.json",
+      "sha256": "c03a115db6240cb3a09eae6347cbbfa5fb7b7cbf0f5c00bbf2a5954cb5433659"
+    },
+    {
+      "path": "summary.json",
+      "sha256": "49e006bdc3ed08fdc6b250d0758fe1f101b3a8fffbc9ef92e265b395278d82f2"
+    }
+  ]
+}

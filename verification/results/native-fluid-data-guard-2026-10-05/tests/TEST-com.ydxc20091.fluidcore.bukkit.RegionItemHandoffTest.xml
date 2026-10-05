@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:28.846Z" hostname="WIN-B5E9U0O0ATH" time="0.16">
+  <properties/>
+  <testcase name="queuedOwnerWorkIsBoundedAndStoppedServiceRejectsFurtherAdmission()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.019"/>
+  <testcase name="retiredOrFullSourceKeepsRecoverableSerializedItem()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.021"/>
+  <testcase name="failedReturnLegNeverRefundsAnAlreadyCommittedDestination()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.017"/>
+  <testcase name="confirmedDeliveryMovesExactlyOneAndReleasesBoundedAdmission()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.013"/>
+  <testcase name="uncertainDestinationNeverRefundsAndDuplicatesPotentiallyCommittedItem()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.013"/>
+  <testcase name="returnLegKeepsJournalAndAdmissionUntilOwnerConfirmsReceipt()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.015"/>
+  <testcase name="destinationChangedAfterPreviewReturnsReservedItemExactlyOnce()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.013"/>
+  <testcase name="aSchedulerThrowCannotStrandAdmissionOrMutateTheSource()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.006"/>
+  <testcase name="recoveryInspectionReadsRealPreservedStateWithoutGrantingAnItemAndRetainsMalformedRecords()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.015"/>
+  <testcase name="capacityPreviewRejectsBeforeSourceReservationAndIo()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.006"/>
+  <testcase name="uncertainReturnLegRetainsPayloadWithoutCreatingASecondSourceItem()" classname="com.ydxc20091.fluidcore.bukkit.RegionItemHandoffTest" time="0.019"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

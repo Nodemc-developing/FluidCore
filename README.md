@@ -5,10 +5,10 @@ FluidCore supplies shared fluid data, storage and container operations for addon
 
 Current version: `0.1.0-SNAPSHOT`. The API is still under development.
 
-Latest prerelease: [Build 2](https://github.com/Nodemc-developing/FluidCore/releases/tag/v0.1.0-SNAPSHOT.2).
-Its runtime JAR and matching source archive are identical to those bundled with
-Farmersdelight-Plugin-Pro 1.2.0. See the [release notes](RELEASE-NOTES-0.1.0-SNAPSHOT.2.md)
-for the fixed CraftEngine build, checksums and verification scope.
+Prepared prerelease: **Build 3** (`v0.1.0-SNAPSHOT.3`), paired with Farmersdelight-Plugin-Pro 1.2.2.
+It targets Minecraft **1.21–26.3**, with Java 21 bytecode and both pinned CraftEngine **26.9.2 / 26.10** builds.
+See the [Build 3 release notes](RELEASE-NOTES-0.1.0-SNAPSHOT.3.md) for changes and actual verification coverage.
+[Build 2](https://github.com/Nodemc-developing/FluidCore/releases/tag/v0.1.0-SNAPSHOT.2) remains available as a historical Java 25 build.
 
 ## Features
 
@@ -46,9 +46,9 @@ amounts occupy at least one visible level, and unknown registered fluids use `ot
 
 ## Requirements and installation
 
-- A compatible Paper or Folia server running CraftEngine 26.10.
-- Java 25 for the FluidCore server plugin and optional examples plugin. The API and core developer artifacts use Java 21 bytecode; this does not make the server plugins compatible with Java 21.
-- The pinned **CraftEngine 26.10-SNAPSHOT** build specified by `ceSha256` in [gradle.properties](gradle.properties).
+- A compatible Paper or Folia server running CraftEngine 26.9.2 or the supported 26.10 snapshot.
+- Build 3 targets Paper/Folia 1.21–26.3 using Java 21 bytecode: run 1.21.x on Java 21 and 26.x on Java 25. Build 2 predates this compatibility work and still requires Java 25. See the [compatibility matrix](docs/compatibility.md) for the exact versions and paths tested.
+- Pinned CraftEngine builds are recorded by `ceSha256` and `ceSnapshotSha256` in [gradle.properties](gradle.properties).
 
 Install CraftEngine and place `FluidCore-0.1.0-SNAPSHOT.jar` in the server's `plugins` directory. Restart the server. Install `FluidCore-Examples-0.1.0-SNAPSHOT.jar` separately if you want the optional example pack.
 
@@ -56,13 +56,13 @@ FluidCore uses bStats for basic usage metrics (plugin ID `34449`). You can disab
 
 ## Building
 
-Supply the matching CraftEngine JAR, then build the plugin and publish developer artifacts locally:
+Use JDK 25 and supply the stable baseline plus the snapshot used to compile optional native sleep support:
 
 ```sh
-FLUIDCORE_CE_JAR=/path/to/craft-engine-paper-plugin-26.10-SNAPSHOT.jar ./gradlew distribution publishToMavenLocal
+./gradlew distribution publishToMavenLocal -PceJar=/path/to/craft-engine-paper-plugin-26.9.2.jar -PceNativeJar=/path/to/craft-engine-paper-plugin-26.10-SNAPSHOT.jar
 ```
 
-On Windows, set `$env:FLUIDCORE_CE_JAR` and run `.\gradlew.bat distribution publishToMavenLocal`. Plugin JARs are written to `dist/`. The build checks the CraftEngine checksum.
+On Windows, use `.\gradlew.bat` with the same two parameters. Plugin JARs are written to `dist/`; `-PfluidcoreDistributionRoot=/path/to/output` selects another artifact directory. Both input checksums are verified. At runtime install one CraftEngine JAR; the 26.10-only adapter loads only when its native API exists.
 
 ## Developer setup
 
@@ -113,7 +113,7 @@ Closing without committing restores both tanks. This example uses in-memory stor
 
 Use `fluidcore:fluids` and `fluidcore:fluid-tags` for registration, `fluidcore:container` for item containers, and `fluidcore:tank` for storage blocks. See the [example pack](examples/src/main/resources/pack/configuration/examples.yml) and [API guide](docs/api.md).
 
-Tank controllers use CraftEngine's sleeping ticker API for processors and hopper transfers. They call `sleep()` when idle and `wakeUp()` after relevant changes, so idle tanks do not poll every tick. Waking a ticker schedules work; it does not immediately execute it. Fluid metadata does not automatically change world physics or lighting.
+On CraftEngine 26.10, tank controllers use the native sleeping ticker API for processors and hopper transfers. On 26.9.2, a software gate suppresses idle business work while CraftEngine still checks a lightweight entry. Relevant slot, fluid and neighbor changes wake the processor; waking does not immediately execute it. Fluid metadata does not automatically change world physics or lighting.
 
 ## License
 

@@ -11,16 +11,19 @@ public final class ForeignFluidData {
     private ForeignFluidData() {}
     public static boolean key(String key) {
         String value = key.toLowerCase(Locale.ROOT);
-        if (value.equals("fluidcore") || value.startsWith("fluidcore:")) return false;
+        if (ownedKey(value)) return false;
+        int separator = value.indexOf(':');
+        String localKey = separator < 0 ? value : value.substring(separator + 1);
         return value.equals("libuid") || value.startsWith("libuid:") || value.startsWith("jug_")
-                || value.equals("papersdelight") || value.startsWith("papersdelight:")
+                || localKey.equals("jug") || localKey.startsWith("jug_")
                 || value.contains("fluid") || value.contains("liquid") || value.contains("tank_data");
     }
+    private static boolean ownedKey(String value) { return value.equals("fluidcore") || value.startsWith("fluidcore:"); }
     public static boolean compound(CompoundTag tag) { return compound(tag, 0); }
     private static boolean compound(CompoundTag tag, int depth) {
         if (depth > 32) return true;
         for (var entry : tag.entrySet()) {
-            if (entry.getKey().startsWith("fluidcore:")) continue;
+            if (ownedKey(entry.getKey().toLowerCase(Locale.ROOT))) continue;
             if (key(entry.getKey()) || entry.getValue() instanceof CompoundTag nested && compound(nested, depth + 1)) return true;
         }
         return false;

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.ce.ContainerSettingsTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:29.027Z" hostname="WIN-B5E9U0O0ATH" time="0.014">
+  <properties/>
+  <testcase name="longCapacitiesArePreservedAndOverflowRejected()" classname="com.ydxc20091.fluidcore.ce.ContainerSettingsTest" time="0.007"/>
+  <testcase name="tagOnlyInitialContentIsValidatedAfterRegistryPublication()" classname="com.ydxc20091.fluidcore.ce.ContainerSettingsTest" time="0.001"/>
+  <testcase name="defaultsMustFitCapacityAndDirectFilters()" classname="com.ydxc20091.fluidcore.ce.ContainerSettingsTest" time="0.001"/>
+  <testcase name="identifiersAndTagsAreCombinedAgainstCurrentRegistry()" classname="com.ydxc20091.fluidcore.ce.ContainerSettingsTest" time="0.003"/>
+  <testcase name="anOmittedWhitelistAllowsAllButExplicitEmptyWhitelistAllowsNone()" classname="com.ydxc20091.fluidcore.ce.ContainerSettingsTest" time="0.001"/>
+  <testcase name="legacySpellingIsExplicitAndConflictingSpellingsFail()" classname="com.ydxc20091.fluidcore.ce.ContainerSettingsTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

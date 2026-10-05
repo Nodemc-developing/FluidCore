@@ -4,7 +4,7 @@ main: com.ydxc20091.fluidcore.FluidCorePlugin
 api-version: '1.21'
 folia-supported: true
 authors: [ydxc20091]
-description: Transactional fluid API and CraftEngine 26.10 integration.
+description: Transactional fluid API and CraftEngine integration.
 dependencies:
   server:
     CraftEngine:

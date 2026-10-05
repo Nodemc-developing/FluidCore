@@ -1,0 +1,88 @@
+{
+  "servers_created": 0,
+  "runs": 14,
+  "successful_runs": 14,
+  "all_registry_fields_outside_profiles_unchanged": true,
+  "all_unselected_profiles_unchanged": true,
+  "selected_profiles": [
+    {
+      "profile_id": "4a459f864d7f",
+      "environment": "folia-26.2",
+      "active": false,
+      "original_plugin_hashes_match": true,
+      "original_registry_plugin_fields_match": true,
+      "plugin_names": [
+        "UaaCrossVersionVerification.jar",
+        "UltimateAdvancementAPI.jar"
+      ]
+    },
+    {
+      "profile_id": "50da503b9875",
+      "environment": "paper-1.21",
+      "active": false,
+      "original_plugin_hashes_match": true,
+      "original_registry_plugin_fields_match": true,
+      "plugin_names": [
+        "UaaCrossVersionVerification.jar",
+        "UltimateAdvancementAPI.jar"
+      ]
+    },
+    {
+      "profile_id": "6519bf8fd521",
+      "environment": "paper-26.3",
+      "active": false,
+      "original_plugin_hashes_match": true,
+      "original_registry_plugin_fields_match": true,
+      "plugin_names": [
+        "UaaCrossVersionVerification.jar",
+        "UltimateAdvancementAPI.jar"
+      ]
+    },
+    {
+      "profile_id": "94e5ce5bfc1a",
+      "environment": "paper-1.21.11",
+      "active": false,
+      "original_plugin_hashes_match": true,
+      "original_registry_plugin_fields_match": true,
+      "plugin_names": [
+        "UaaCrossVersionVerification.jar",
+        "UltimateAdvancementAPI.jar"
+      ]
+    },
+    {
+      "profile_id": "abbb001e95c7",
+      "environment": "paper-1.21.4",
+      "active": false,
+      "original_plugin_hashes_match": true,
+      "original_registry_plugin_fields_match": true,
+      "plugin_names": [
+        "UaaCrossVersionVerification.jar",
+        "UltimateAdvancementAPI.jar"
+      ]
+    },
+    {
+      "profile_id": "ad64a1a701a6",
+      "environment": "folia-1.21.4",
+      "active": false,
+      "original_plugin_hashes_match": true,
+      "original_registry_plugin_fields_match": true,
+      "plugin_names": [
+        "UaaCrossVersionVerification.jar",
+        "UltimateAdvancementAPI.jar"
+      ]
+    },
+    {
+      "profile_id": "ef5e2f1fc6ec",
+      "environment": "paper-1.21.3",
+      "active": false,
+      "original_plugin_hashes_match": true,
+      "original_registry_plugin_fields_match": true,
+      "plugin_names": [
+        "UaaCrossVersionVerification.jar",
+        "UltimateAdvancementAPI.jar"
+      ]
+    }
+  ],
+  "active_java_processes_in_selected_historical_roots": [],
+  "fully_restored": true
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.bukkit.ForeignFluidDataTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:28.724Z" hostname="WIN-B5E9U0O0ATH" time="0.005">
+  <properties/>
+  <testcase name="opaqueCompoundContainerMarkersAreRecognizedWithoutChangingTheirPayload()" classname="com.ydxc20091.fluidcore.bukkit.ForeignFluidDataTest" time="0.004"/>
+  <testcase name="containerMarkersAreProtectedAcrossArbitraryNamespaces()" classname="com.ydxc20091.fluidcore.bukkit.ForeignFluidDataTest" time="0.0"/>
+  <testcase name="ownedKeysAreHandledByTheirOwnCodecInsteadOfBeingClassifiedAsForeign()" classname="com.ydxc20091.fluidcore.bukkit.ForeignFluidDataTest" time="0.0"/>
+  <testcase name="ownedCompoundPayloadsDoNotTriggerForeignMatchingThroughTheirInternalFields()" classname="com.ydxc20091.fluidcore.bukkit.ForeignFluidDataTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

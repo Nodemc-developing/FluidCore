@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:28.729Z" hostname="WIN-B5E9U0O0ATH" time="0.01">
+  <properties/>
+  <testcase name="oneItemApisKeepFirstAvailableSlotAndRejectMultipleItems()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.0"/>
+  <testcase name="ownerChecksRejectEvenPreviewAndDoNotMutate()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.0"/>
+  <testcase name="batchRollbackRestoresEveryEditedSlotAndOriginalMetadata()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.0"/>
+  <testcase name="crossingTickFailsCommitAndRestoresAllSlots()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.001"/>
+  <testcase name="countedTakePreservesTheRemainderAndRejectsChangedSourceOrExcessAmount()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.0"/>
+  <testcase name="completeBatchMergesAndSplitsWithoutChangingMetadataOrCallerStack()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.002"/>
+  <testcase name="ordinaryInsertionAndTargetedInsertionCannotUseEquipmentAsOverflow()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.001"/>
+  <testcase name="putAtHonorsExactSlotStackLimitAndMetadataCompatibility()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.0"/>
+  <testcase name="partlyFailingBukkitWriteStillRestoresTheWrittenSlot()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.001"/>
+  <testcase name="insufficientTotalCapacityRejectsBeforeAnyPartialWrite()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.0"/>
+  <testcase name="nestedRollbackPreservesParentAndRootRollbackAllowsLaterReuse()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.0"/>
+  <testcase name="nestedConflictCannotBeAdoptedAndThenOverwrittenByOuterRollback()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.0"/>
+  <testcase name="conflictingExternalWriteSurvivesWhileOtherOwnedWritesRollBack()" classname="com.ydxc20091.fluidcore.bukkit.InventoryParticipantTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

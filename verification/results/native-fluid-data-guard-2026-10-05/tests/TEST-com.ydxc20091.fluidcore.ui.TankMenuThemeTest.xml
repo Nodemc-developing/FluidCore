@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.ui.TankMenuThemeTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:29.257Z" hostname="WIN-B5E9U0O0ATH" time="0.019">
+  <properties/>
+  <testcase name="textureTraversalOrMiniMessageIsNeverUsedAsAnAssetPath()" classname="com.ydxc20091.fluidcore.ui.TankMenuThemeTest" time="0.002"/>
+  <testcase name="missingBackgroundRetainsReadableUprightTitle()" classname="com.ydxc20091.fluidcore.ui.TankMenuThemeTest" time="0.015"/>
+  <testcase name="externalGlyphFontAndColorRemainIntact()" classname="com.ydxc20091.fluidcore.ui.TankMenuThemeTest" time="0.001"/>
+  <testcase name="fluidTextureMetadataResolvesOnlyLoadedItemIdentifiers()" classname="com.ydxc20091.fluidcore.ui.TankMenuThemeTest" time="0.001"/>
+  <testcase name="anUnknownFluidIsNeverPresentedAsWater()" classname="com.ydxc20091.fluidcore.ui.TankMenuThemeTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

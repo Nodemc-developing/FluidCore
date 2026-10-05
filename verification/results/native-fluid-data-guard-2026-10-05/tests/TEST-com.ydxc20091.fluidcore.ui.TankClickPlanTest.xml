@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.ui.TankClickPlanTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:29.243Z" hostname="WIN-B5E9U0O0ATH" time="0.004">
+  <properties/>
+  <testcase name="swapUsesTheNewCursorItemsLimitRatherThanTheOldCursorsLimit()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.001"/>
+  <testcase name="emptySlotRightDepositsOneAndLeftDepositsTheAvailableStack()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="emptyCursorLeftTakesAllAndRightTakesRoundedUpHalf()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="singleDragDepositsAtMostOnePerDestinationAndNeverInventsAdditionalItems()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.001"/>
+  <testcase name="shiftToInputTakesAsMuchAsFitsAndNeverMatchesAnotherMetadataVariant()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="shiftFromInputOnlyCountsStorageCapacityForCompatibleItems()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="originalMetadataArraysRemainDetachedFromEveryPlannedResult()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="differentMetadataSwapsWholeStacksInsteadOfMergingThem()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="dragLeavesIncompatibleAndFullDestinationsUnchanged()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="dragKeepsOpaqueMetadataOnEveryDestinationAndRetainedCursor()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="evenDragClampsEachShareWithoutRedistributingItsOverflow()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="explicitSwapRejectsAnOversizedIncomingStackAndDoesNotMutateSources()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="dragCannotProceedWithZeroShareOrNoCompatibleSpace()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="matchingStackOnlyConsumesActualFreeCapacity()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.0"/>
+  <testcase name="evenDragSplitsAcrossAllDestinationsAndLeavesTheRemainderOnRealCursor()" classname="com.ydxc20091.fluidcore.ui.TankClickPlanTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

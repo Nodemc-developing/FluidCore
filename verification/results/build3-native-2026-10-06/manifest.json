@@ -1,0 +1,124 @@
+{
+  "date": "2026-10-06",
+  "release_tag": "v0.1.0-SNAPSHOT.3",
+  "status": "two-fixed-consumer-native-combinations-passed",
+  "runtime_jar_sha256": "ae4c584cf18c1c11d716fed395bb8cdcdf05a204d1fcb68b784128220933f04a",
+  "source_batch": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\.local\\version-compatibility\\reports\\native-format-1.2.2-final",
+  "counts": {
+    "combinations": 2,
+    "native_pass": 38,
+    "additional_log_pass": 4,
+    "joint_pass": 42
+  },
+  "scope": "Joint checks with Farmersdelight-Plugin-Pro 1.2.2 and UltimateAdvancementAPI; totals include consumer features, not independent FluidCore tests.",
+  "coverage": [
+    "Detached native bucket/bottle SIMULATE and EXECUTE with caller items preserved",
+    "Native ItemStack bytes round trip: water bottle and CE tank 3750/16000 mB, metadata/CE ID/glass-color PDC preserved",
+    "999 mB insufficient whole-bucket source and full destination rejected without changes",
+    "Modern color component update preserves additional colors/floats/flags/strings/unrelated PDC"
+  ],
+  "not_verified": [
+    "Real client rendering, player inventory/menu clicks and actual connection packet delivery",
+    "Cross-region player transfers or hoppers",
+    "Complete current world-controller placement/loot/save/restart",
+    "Protection plugin combinations",
+    "Performance benchmarks",
+    "Every exact core or patch version in the target range"
+  ],
+  "skip_policy": "SKIP remains distinct in the original reports and is excluded from PASS totals.",
+  "restoration_record": "restore-proof.json",
+  "runs": [
+    {
+      "environment": "paper-26.3",
+      "craft_engine": "26.9.2",
+      "core_build": "26.3-140-977da0d",
+      "java": "25.0.3",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "b9c892f3df897965a408399f20b772737ca7b5884d4c9af98b4389265d6155b1",
+        "FluidCore.jar": "ae4c584cf18c1c11d716fed395bb8cdcdf05a204d1fcb68b784128220933f04a",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "90cc932052aade918c330a7976aaa3c54e745702ec74eb7f2ce444416d9fcaf3",
+        "CraftEngine.jar": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa"
+      },
+      "environment_record": "paper-26.3-ce-26.9.2/environment.json",
+      "report": "paper-26.3-ce-26.9.2/report.json",
+      "runner_record": "paper-26.3-ce-26.9.2/result.json",
+      "profile_restore_record": "paper-26.3-ce-26.9.2/native-profile-restore-proof.json"
+    },
+    {
+      "environment": "folia-26.2",
+      "craft_engine": "26.10",
+      "core_build": "26.2-7-14b7fee",
+      "java": "25.0.3",
+      "status": "PASS",
+      "native_counts": {
+        "PASS": 19,
+        "SKIP": 1
+      },
+      "additional_log_counts": {
+        "PASS": 2
+      },
+      "artifacts": {
+        "Farmersdelight-Plugin-Pro.jar": "b9c892f3df897965a408399f20b772737ca7b5884d4c9af98b4389265d6155b1",
+        "FluidCore.jar": "ae4c584cf18c1c11d716fed395bb8cdcdf05a204d1fcb68b784128220933f04a",
+        "UltimateAdvancementAPI.jar": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589",
+        "FdVersionVerification.jar": "90cc932052aade918c330a7976aaa3c54e745702ec74eb7f2ce444416d9fcaf3",
+        "CraftEngine.jar": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6"
+      },
+      "environment_record": "folia-26.2-ce-26.10/environment.json",
+      "report": "folia-26.2-ce-26.10/report.json",
+      "runner_record": "folia-26.2-ce-26.10/result.json",
+      "profile_restore_record": "folia-26.2-ce-26.10/native-profile-restore-proof.json"
+    }
+  ],
+  "captured_records": [
+    {
+      "path": "folia-26.2-ce-26.10/environment.json",
+      "sha256": "5a4ea39d5be921aed090a5d2bb380169fa94869159dca6c061c030a68d86688f"
+    },
+    {
+      "path": "folia-26.2-ce-26.10/native-profile-restore-proof.json",
+      "sha256": "bde2bab54b22017bd24788e0bcbab937c546a2e894cfb95424aa0da21f52dfa2"
+    },
+    {
+      "path": "folia-26.2-ce-26.10/report.json",
+      "sha256": "bee7754423de04226c7849bd05692739c7d34128ff6b714e2c5a5fff47a5e51c"
+    },
+    {
+      "path": "folia-26.2-ce-26.10/result.json",
+      "sha256": "885a1196069c28768e3fc0ee560995a2320732121c2ae2f1dadfd02149a5d638"
+    },
+    {
+      "path": "paper-26.3-ce-26.9.2/environment.json",
+      "sha256": "360570b5af050261a0cbe6d751594c876b910e2a2eb55a8b37520b1b44a13de0"
+    },
+    {
+      "path": "paper-26.3-ce-26.9.2/native-profile-restore-proof.json",
+      "sha256": "bde2bab54b22017bd24788e0bcbab937c546a2e894cfb95424aa0da21f52dfa2"
+    },
+    {
+      "path": "paper-26.3-ce-26.9.2/report.json",
+      "sha256": "dc52c8e34fa94f851a123547b82f398bbcbf5ed6b080ea62ba5a77cbdb3b4932"
+    },
+    {
+      "path": "paper-26.3-ce-26.9.2/result.json",
+      "sha256": "aa7e5e1ef9053be57cceecb4ac617877ec5de1de79382a9a3127813c094d39a8"
+    },
+    {
+      "path": "restore-proof.json",
+      "sha256": "7e2184de079509e5e4fb3ca75d012afc22fcdedaab9b500afe5614c47cd7a8fd"
+    },
+    {
+      "path": "summary.json",
+      "sha256": "df6e45b6463c00fdcbccb92375a7fe099beab008ba1f41672cf42fba474b12e8"
+    }
+  ]
+}

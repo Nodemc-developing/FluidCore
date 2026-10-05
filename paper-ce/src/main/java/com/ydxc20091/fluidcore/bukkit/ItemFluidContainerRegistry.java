@@ -269,7 +269,7 @@ public final class ItemFluidContainerRegistry implements AutoCloseable {
             case MILK_BUCKET -> FluidStack.of(FluidVariant.of("minecraft:milk"), 1000);
             case HONEY_BOTTLE -> FluidStack.of(FluidVariant.of("minecraft:honey"), 250);
             case POTION -> item.getItemMeta() instanceof PotionMeta potion && potion.getBasePotionType() == PotionType.WATER
-                    && !potion.hasCustomEffects() ? FluidStack.of(FluidVariant.of("minecraft:water"), 250) : null;
+                    && potion.getCustomEffects().isEmpty() ? FluidStack.of(FluidVariant.of("minecraft:water"), 250) : null;
             default -> null;
         };
     }

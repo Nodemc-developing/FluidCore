@@ -1,0 +1,86 @@
+{
+  "status": "PASS",
+  "original_files_restored": true,
+  "files": [
+    {
+      "path": "plugins\\CraftEngine\\resources\\farmersdelight\\configuration\\recipes\\cooking_pot_recipes.yml",
+      "existed": true,
+      "sha256": "a17787f14a517316657cf898cb6c0997f0cc76575cd4ce126455d4419b259788",
+      "restored": true
+    },
+    {
+      "path": "plugins\\CraftEngine\\resources\\farmersdelight\\configuration\\recipes\\cutting_board_recipes.yml",
+      "existed": true,
+      "sha256": "0ac18d1f2765b5645b66e1752c435eb59c8f2d81b255dd7ac05d3a7168fbbfbc",
+      "restored": true
+    },
+    {
+      "path": "plugins\\CraftEngine\\resources\\farmersdelight_fluids\\configuration\\fluid_recipes.yml",
+      "existed": true,
+      "sha256": "7348b842a7e97f2ecd0e35a7080ad913e15c0815154941e2eeed182e19ef75f7",
+      "restored": true
+    },
+    {
+      "path": "plugins\\Farmersdelight-Plugin-Pro\\.native-recipe-defaults-installed",
+      "existed": false,
+      "restored": true
+    },
+    {
+      "path": "plugins\\Farmersdelight-Plugin-Pro\\.recipes-in-content-pack-v1",
+      "existed": true,
+      "sha256": "6857c4df3615b24c393ac07078134a0dd7a683998176c2f6150cbc771b535cd6",
+      "restored": true
+    },
+    {
+      "path": "plugins\\Farmersdelight-Plugin-Pro\\common-tags.yml",
+      "existed": true,
+      "sha256": "206ace35aef38907f695affaec52c64cef5c26ad9be31a1dfe4c837b6f92dfba",
+      "restored": true
+    },
+    {
+      "path": "plugins\\Farmersdelight-Plugin-Pro\\config.yml",
+      "existed": true,
+      "sha256": "d9925d2587ded1dc112bbb2936dd11b90286c77090bc1fb36f963233065f0647",
+      "restored": true
+    },
+    {
+      "path": "plugins\\Farmersdelight-Plugin-Pro\\display-overrides.yml",
+      "existed": true,
+      "sha256": "60121acd4ba29becd6d3bda3d338e817cdd77485b62b255332e5b832528a94fd",
+      "restored": true
+    },
+    {
+      "path": "plugins\\Farmersdelight-Plugin-Pro\\drops.yml",
+      "existed": true,
+      "sha256": "6b9e9f13ac9e63bb0c4130bf63e1c0ab60f306935558c275c4aa23c1783842eb",
+      "restored": true
+    },
+    {
+      "path": "plugins\\Farmersdelight-Plugin-Pro\\gui.yml",
+      "existed": true,
+      "sha256": "38e15435d7da24f1bfff9489d5025cf122ddf62e056f3ec5ea93dd64897e9bb0",
+      "restored": true
+    },
+    {
+      "path": "plugins\\Farmersdelight-Plugin-Pro\\lang\\en_us.yml",
+      "existed": true,
+      "sha256": "735d7056f197fbc291a8b631822810c7f425b0564bee7d679970e122ccb82db8",
+      "restored": true
+    },
+    {
+      "path": "plugins\\Farmersdelight-Plugin-Pro\\lang\\zh_cn.yml",
+      "existed": true,
+      "sha256": "9429bd8dae28e1e3a2ad1b294e71666750aad592edecd53db41ca7b7037373a1",
+      "restored": true
+    },
+    {
+      "path": "plugins\\Farmersdelight-Plugin-Pro\\world-data.yml",
+      "existed": true,
+      "sha256": "7c48e70be52fc1678d9ee26533aeb59939f0944c533f8a3e28a51d4dc2b3f785",
+      "restored": true
+    }
+  ],
+  "original_fd_content_cache_restored": true,
+  "original_fd_content_cache_file_count": 2210,
+  "worlds_or_databases_replaced": false
+}

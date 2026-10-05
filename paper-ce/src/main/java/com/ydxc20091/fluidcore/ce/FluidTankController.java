@@ -19,7 +19,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import net.momirealms.craftengine.core.block.entity.tick.BlockEntityTicker;
-import net.momirealms.craftengine.core.block.entity.tick.SleepingBlockEntityTicker;
 import net.momirealms.craftengine.core.world.CEWorld;
 import net.momirealms.craftengine.core.block.ImmutableBlockState;
 
@@ -42,11 +41,11 @@ public final class FluidTankController extends BlockEntityController {
     private long validatedRegistryGeneration = -1;
     private final TankInventory inventory;
     private volatile byte[] savedInput, savedOutput;
-    private SleepingBlockEntityTicker<FluidTankController> ticker;
+    private ControllerTickers.Handle<FluidTankController> ticker;
     private int hopperCooldown;
     private volatile int glassColor = 0xffffff;
     private volatile int savedGlassColor = 0xffffff;
-    private final java.util.List<net.momirealms.craftengine.core.world.chunk.ChunkSubscription> neighborSubscriptions = new java.util.ArrayList<>(2);
+    private final java.util.List<Runnable> neighborSubscriptions = new java.util.ArrayList<>(2);
     private static final org.bukkit.NamespacedKey GLASS_COLOR = new org.bukkit.NamespacedKey("fluidcore", "glass_color");
 
     FluidTankController(BlockEntity entity, FluidTankBehavior behavior, CraftEngineBridge bridge) {
@@ -151,6 +150,7 @@ public final class FluidTankController extends BlockEntityController {
     public byte[] savedData() { return savedData.clone(); }
     public TankInventory inventory() { context.checkAccess(); return inventory; }
     public void wakeUp() { context.checkAccess(); if (ticker != null) ticker.wakeUp(); }
+    public boolean tickerSleeping() { context.checkAccess(); return ticker != null && ticker.isSleeping(); }
     public void progressChanged() { context.checkAccess(); bridge.tankChanged(this); }
     public int glassColor() { context.checkAccess(); return glassColor; }
     public void writeColor(ItemStack item) { context.checkAccess(); item.editMeta(meta -> meta.getPersistentDataContainer().set(GLASS_COLOR, PersistentDataType.INTEGER, glassColor)); }
@@ -186,8 +186,8 @@ public final class FluidTankController extends BlockEntityController {
     private static byte[] encodeItem(ItemStack item) { return item == null ? null : net.momirealms.craftengine.bukkit.item.BukkitItemManager.instance().wrap(item).toBytes(); }
     private static ItemStack decodeItem(byte[] bytes) { return bytes == null ? null : (ItemStack) Item.fromBytes(bytes).platformItem(); }
     @Override public <C extends BlockEntityController> BlockEntityTicker<C> createBlockEntityTicker(CEWorld world, ImmutableBlockState state) {
-        if (ticker == null) ticker = new SleepingBlockEntityTicker<>((level, position, blockState, controller) -> controller.tick());
-        return createTickerHelper(ticker);
+        if (ticker == null) ticker = ControllerTickers.create((level, position, blockState, controller) -> controller.tick());
+        return createTickerHelper(ticker.ticker());
     }
     private void tick() {
         if (!activation.active() || !bridge.running()) { ticker.sleep(); return; }
@@ -329,14 +329,14 @@ public final class FluidTankController extends BlockEntityController {
         for (int[] offset : offsets) {
             int adjacentX = x + offset[0], adjacentZ = z + offset[1];
             if ((adjacentX >> 4) == (x >> 4) && (adjacentZ >> 4) == (z >> 4)) continue;
-            neighborSubscriptions.add(subscribeChunkLoad(new net.momirealms.craftengine.core.world.BlockPos(adjacentX, y, adjacentZ), () -> {
+            neighborSubscriptions.add(ControllerTickers.subscribe(this, new net.momirealms.craftengine.core.world.BlockPos(adjacentX, y, adjacentZ), () -> {
                 if (!activation.active() || !bridge.running() || !blockEntity.isValid()) return;
                 context.checkAccess(); bridge.hoppers().invalidate(this); hopperCooldown = 0; wakeUp();
-            }));
+            }, bridge));
         }
     }
     private void cancelNeighborSubscriptions() {
-        neighborSubscriptions.forEach(net.momirealms.craftengine.core.world.chunk.ChunkSubscription::cancel);
+        neighborSubscriptions.forEach(Runnable::run);
         neighborSubscriptions.clear();
     }
     @Override public void onUnload() { activation.retire(); cancelNeighborSubscriptions(); if (ticker != null) ticker.sleep(); bridge.retireTank(this); }

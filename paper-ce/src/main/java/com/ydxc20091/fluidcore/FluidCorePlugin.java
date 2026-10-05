@@ -55,7 +55,7 @@ public final class FluidCorePlugin extends JavaPlugin implements BukkitFluidCore
         services.register(CraftEngineBridge.class, bridge, this, ServicePriority.Normal);
         services.register(FluidRegistry.class, registry, this, ServicePriority.Normal);
         metrics = new Metrics(this, 34449);
-        getLogger().info("FluidCore " + getPluginMeta().getVersion() + " by ydxc20091 enabled; CE 26.10 bridge registered.");
+        getLogger().info("FluidCore " + getPluginMeta().getVersion() + " by ydxc20091 enabled; CraftEngine bridge registered.");
     }
 
     @Override public void onDisable() {

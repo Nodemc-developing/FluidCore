@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.async.SnapshotWorkQueueTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:28.378Z" hostname="WIN-B5E9U0O0ATH" time="0.049">
+  <properties/>
+  <testcase name="shutdownCompletesQueuedFutures()" classname="com.ydxc20091.fluidcore.async.SnapshotWorkQueueTest" time="0.02"/>
+  <testcase name="staleSnapshotNeverApplies()" classname="com.ydxc20091.fluidcore.async.SnapshotWorkQueueTest" time="0.006"/>
+  <testcase name="saturationDoesNotRunWorkOnCaller()" classname="com.ydxc20091.fluidcore.async.SnapshotWorkQueueTest" time="0.002"/>
+  <testcase name="validSnapshotAppliesThroughOwnerExecutor()" classname="com.ydxc20091.fluidcore.async.SnapshotWorkQueueTest" time="0.002"/>
+  <testcase name="shutdownCancelsResultWaitingForOwner()" classname="com.ydxc20091.fluidcore.async.SnapshotWorkQueueTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -6,7 +6,7 @@ FluidCore 自研部分 Copyright © 2026 ydxc20091。`api` 模块为 Apache-2.0�
 
 | 依赖 | 用途 | 分发说明 |
 | --- | --- | --- |
-| CraftEngine 26.10-SNAPSHOT | 必需服务端运行依赖 | 由使用者单独安装；本库插件不内嵌 CE JAR |
+| CraftEngine 26.9.2 / 固定 26.10-SNAPSHOT | 必需服务端运行依赖 | 由使用者单独安装一个版本；本库插件不内嵌 CE JAR |
 | Paper API | 编译服务端适配 | provided / compileOnly，不内嵌 |
 | [bStats](https://bstats.org/) 3.2.1 | Basic usage metrics (plugin ID `34449`) | MIT, Bastian Oppermann; [license](LICENSES/bStats.txt) |
 | [Sparrow YAML](https://github.com/Xiao-MoMi/sparrow-yaml) 1.0.22 | 运行插件配置读取 | GPL-3.0，XiaoMoMi；[许可证](LICENSES/Sparrow-YAML.txt) |

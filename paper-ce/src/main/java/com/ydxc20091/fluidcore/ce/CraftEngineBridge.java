@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
-/** All version-sensitive CraftEngine 26.10 types are confined to this package. */
+/** CraftEngine extensions and optional native capabilities are confined to this package. */
 public final class CraftEngineBridge implements AutoCloseable, Listener {
     private final JavaPlugin plugin;
     private final FluidRegistry registry;
@@ -50,6 +50,7 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
     private final BlockProviderResolver resolver;
     private final ItemContainerTransfers containers;
     private final TankHoppers hoppers;
+    private final ChunkLoadWatch chunkLoads;
     private final com.ydxc20091.fluidcore.ui.TankMenu menus;
     private final com.ydxc20091.fluidcore.bukkit.RegionItemHandoff handoffs;
     private volatile TankProcessor processor;
@@ -71,6 +72,7 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
         resolver = new BlockProviderResolver(this);
         containers = new ItemContainerTransfers(registry, this::definition, CraftEngineItems::isCustomItem);
         hoppers = new TankHoppers(this);
+        chunkLoads = new ChunkLoadWatch(this);
         menus = new com.ydxc20091.fluidcore.ui.TankMenu(this);
         int capacity = plugin instanceof com.ydxc20091.fluidcore.FluidCorePlugin core && core.settings() != null ? core.settings().handoffCapacity() : 128;
         handoffs = new com.ydxc20091.fluidcore.bukkit.RegionItemHandoff(plugin.getDataFolder().toPath().resolve("handoff-recovery"), capacity);
@@ -78,9 +80,10 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
 
     /** Invoke from onLoad, after CE onLoad and before CE begins its first resource parse. */
     public void register() {
+        ControllerTickers.initialize();
         if (registered) throw new IllegalStateException("Bridge already registered");
         CraftEngine engine = CraftEngine.instance();
-        if (engine == null) throw new IllegalStateException("CraftEngine 26.10 must be loaded before FluidCore");
+        if (engine == null) throw new IllegalStateException("CraftEngine must be loaded before FluidCore");
         if (engine.isFullyLoaded()) throw new IllegalStateException("FluidCore extensions must register before the first CE resource parse");
         ItemSettingsModifiers.register(Key.of("fluidcore:container"), value -> {
             ContainerDefinition definition = ContainerSettings.parse(value.getAsSection());
@@ -112,6 +115,8 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
         containers.containers().invalidate();
         wakeLoadedTanks();
     }
+    @EventHandler public void onChunkLoad(org.bukkit.event.world.ChunkLoadEvent event) { chunkLoads.loaded(event); }
+    ChunkLoadWatch chunkLoads() { return chunkLoads; }
 
     @EventHandler public void onPluginDisable(PluginDisableEvent event) {
         recipeNavigation.unregisterOwner(event.getPlugin());
@@ -250,6 +255,7 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
 
     @Override public void close() {
         running = false;
+        chunkLoads.close();
         menus.close(); processor = null;
         recipeNavigation.clear();
         handoffs.close();

@@ -11,7 +11,7 @@ import net.momirealms.craftengine.core.block.ImmutableBlockState;
 import net.momirealms.craftengine.core.block.entity.BlockEntity;
 import net.momirealms.craftengine.core.block.entity.BlockEntityController;
 import net.momirealms.craftengine.core.block.entity.tick.BlockEntityTicker;
-import net.momirealms.craftengine.core.block.entity.tick.SleepingBlockEntityTicker;
+import com.ydxc20091.fluidcore.ce.ControllerTickers;
 import net.momirealms.craftengine.core.world.CEWorld;
 import org.bukkit.Location;
 
@@ -22,7 +22,7 @@ public final class HeatingController extends BlockEntityController {
     private final FluidCoreExamplesPlugin plugin;
     private long tickCount;
     private boolean accessFailureReported;
-    private final SleepingBlockEntityTicker<HeatingController> ticker = new SleepingBlockEntityTicker<>((world, position, state, controller) -> controller.process());
+    private final ControllerTickers.Handle<HeatingController> ticker = ControllerTickers.create((world, position, state, controller) -> controller.process());
 
     HeatingController(BlockEntity entity, FluidCoreExamplesPlugin plugin) {
         super(entity);
@@ -56,7 +56,7 @@ public final class HeatingController extends BlockEntityController {
     }
 
     @Override public <C extends BlockEntityController> BlockEntityTicker<C> createBlockEntityTicker(CEWorld world, ImmutableBlockState state) {
-        return createTickerHelper(ticker);
+        return createTickerHelper(ticker.ticker());
     }
 
     private void process() {

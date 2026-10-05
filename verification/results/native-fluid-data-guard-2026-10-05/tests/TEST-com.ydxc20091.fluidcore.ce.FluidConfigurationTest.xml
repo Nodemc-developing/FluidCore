@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:29.047Z" hostname="WIN-B5E9U0O0ATH" time="0.046">
+  <properties/>
+  <testcase name="aRemovedFluidCannotBeResolvedThroughPreviousReloadData()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.012"/>
+  <testcase name="loadingStagesHaveActualParserDependenciesAndRegistryPublicationBarrier()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.001"/>
+  <testcase name="omittedFieldsUseStandardDefaults()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.0"/>
+  <testcase name="externalOverlayControlsTagCandidatesWhenItsCeBaseIsReplacedOrRemoved()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.005"/>
+  <testcase name="anExternalOverlayEqualToItsPreviousBaseStillSurvivesBaseTagChanges()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.001"/>
+  <testcase name="tagCyclesAndUnknownReferencesRetainOldRegistry()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.003"/>
+  <testcase name="standardPropertiesAndSoundEventsDecodeIntoTypedModel()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.009"/>
+  <testcase name="tagListsRequireValuesAndRejectDuplicateEntriesAndDefinitions()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.001"/>
+  <testcase name="overridesRequireExplicitBooleanFlagAndExistingBase()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.003"/>
+  <testcase name="invalidPhysicalValuesAndIdentifiersFailStrictly()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.001"/>
+  <testcase name="colorAcceptsOpaqueRgbExplicitArgbAndPackedValuesWithoutTruncation()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.001"/>
+  <testcase name="tagsCanReferenceLaterDeclarationsAndInlineMemberships()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.0"/>
+  <testcase name="textureMetadataAcceptsPackRelativeNamesWithoutResolvingFiles()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.001"/>
+  <testcase name="explicitBuiltinMetadataOverridePreservesBaseAndRestoresOnRemoval()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.001"/>
+  <testcase name="removingAnOverrideDoesNotRetainItsInlineTagInNewCandidates()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.001"/>
+  <testcase name="failingReloadRetainsBothFluidPropertiesAndIndependentTags()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.001"/>
+  <testcase name="duplicateOrMalformedSectionsPreventPartialRegistryPublication()" classname="com.ydxc20091.fluidcore.ce.FluidConfigurationTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: CE fluid registry publication failed: Unknown fluid tag: example:old_inline
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: CE fluid registry publication failed: Unknown fluid tag: example:external
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: CE fluid registry publication failed: Unknown fluid tag: example:missing
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: CE fluid registry publication failed: Fluid tag example:drinkable references unknown fluid: example:missing
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: CE fluid registry publication failed: Cyclic fluid tag references: [example:nested, example:drinkable] -> example:nested
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: CE fluid registry publication failed: Fluid belongs to another owner: minecraft:water
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: Invalid CE fluid configuration; the previous FluidCore registry remains active
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: Invalid CE fluid configuration; the previous FluidCore registry remains active
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: CE fluid registry publication failed: Unknown fluid tag: example:temporary
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: CE fluid registry publication failed: Fluid tag example:drinkable references unknown fluid: example:missing
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: Invalid CE fluid configuration; the previous FluidCore registry remains active
+10月 05, 2026 11:38:29 下午 com.ydxc20091.fluidcore.ce.FluidConfigParser publishCandidate
+警告: Invalid CE fluid configuration; the previous FluidCore registry remains active
+]]></system-err>
+</testsuite>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" tests="18" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:28.429Z" hostname="WIN-B5E9U0O0ATH" time="0.295">
+  <properties/>
+  <testcase name="conflictingExternalCursorSurvivesValidationFailureAndRollback()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.279"/>
+  <testcase name="countedTakeAndUncommittedRollbackConserveBothAmountAndMetadata()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.001"/>
+  <testcase name="rolledBackParticipantCanBeReusedAfterAnIndependentCursorChange()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.0"/>
+  <testcase name="takeClampsToAvailableItemsAndTreatsInvalidMaximumAsNoOp()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.0"/>
+  <testcase name="externalReplacementOfAnEmptyExpectedCursorIsAlsoProtected()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.001"/>
+  <testcase name="wholeStackInsertionCommitsOnceAndPreservesMetadata()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.001"/>
+  <testcase name="cursorAndMultiSlotInventoryAreOneAtomicLocalTransaction()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.004"/>
+  <testcase name="ownershipIsCheckedBeforeTouchingThePlayerCursor()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.0"/>
+  <testcase name="partlyFailingSetterRestoresTheActualCursor()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.001"/>
+  <testcase name="replacementRequiresTheExactOriginalAmountAndMetadata()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.001"/>
+  <testcase name="nestedRollbackRestoresParentAndOuterCommitKeepsOnlyItsEdit()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.001"/>
+  <testcase name="committedNestedEditStillRollsBackWhenTheRootTransactionDoesNotCommit()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.0"/>
+  <testcase name="crossingTickPreventsCommitAndRestoresTheCursor()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.001"/>
+  <testcase name="currentReturnsDetachedNamesAndPersistentByteArrays()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.0"/>
+  <testcase name="allAirValuesNormalizeToEmptyAndCanBeReplacedByAnExactEmptyExpectation()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.001"/>
+  <testcase name="nestedConflictStaysUnownedUntilTheRootTransactionCloses()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.0"/>
+  <testcase name="fullOrIncompatibleCursorRejectsBeforeWritingAnyPart()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.001"/>
+  <testcase name="zeroAmountAlsoNormalizesToEmptyWithoutChangingRealItemMetadata()" classname="com.ydxc20091.fluidcore.bukkit.CursorParticipantTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

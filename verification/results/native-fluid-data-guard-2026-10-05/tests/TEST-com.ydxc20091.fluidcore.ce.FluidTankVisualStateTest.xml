@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.ce.FluidTankVisualStateTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:29.103Z" hostname="WIN-B5E9U0O0ATH" time="0.004">
+  <properties/>
+  <testcase name="emptyPartialAndFullContentsHaveVisibleLevelsWithoutChangingTheAmount()" classname="com.ydxc20091.fluidcore.ce.FluidTankVisualStateTest" time="0.001"/>
+  <testcase name="longAmountsAndCapacitiesNeverOverflowIntoAnEmptyOrNegativeLevel()" classname="com.ydxc20091.fluidcore.ce.FluidTankVisualStateTest" time="0.001"/>
+  <testcase name="supportedAndCustomFluidKindsStayDistinct()" classname="com.ydxc20091.fluidcore.ce.FluidTankVisualStateTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

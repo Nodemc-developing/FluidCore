@@ -1,0 +1,86 @@
+{
+  "version": "1.2.2",
+  "time": "2026-10-05T15:48:51.625788+00:00",
+  "overall": "PASS",
+  "combinations": 2,
+  "native_pass": 38,
+  "load_log_pass": 4,
+  "combined_pass": 42,
+  "cases": [
+    {
+      "environment": "paper-26.3",
+      "ce": "26.9.2",
+      "core_build": "26.3-140-977da0d",
+      "java": "25.0.3",
+      "native_pass": 19,
+      "load_log_pass": 2,
+      "status": "PASS",
+      "recipes": "28/107/24",
+      "config_version": 4,
+      "report": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\.local\\version-compatibility\\reports\\20261005T154356Z\\paper-26.3-ce-26.9.2",
+      "deployed_plugins": {
+        "Farmersdelight-Plugin-Pro.jar": {
+          "source": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\build\\libs\\Farmersdelight-Plugin-Pro-1.2.2.jar",
+          "sha256": "b9c892f3df897965a408399f20b772737ca7b5884d4c9af98b4389265d6155b1"
+        },
+        "FluidCore.jar": {
+          "source": "E:\\出售的插件\\FluidCore\\.local\\native-recipe-format-artifacts\\FluidCore-0.1.0-SNAPSHOT.jar",
+          "sha256": "ae4c584cf18c1c11d716fed395bb8cdcdf05a204d1fcb68b784128220933f04a"
+        },
+        "UltimateAdvancementAPI.jar": {
+          "source": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\libs\\UltimateAdvancementAPI-Plugin-2.8.1-pro.3.jar",
+          "sha256": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589"
+        },
+        "FdVersionVerification.jar": {
+          "source": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\.local\\version-compatibility\\FdVersionVerification.jar",
+          "sha256": "90cc932052aade918c330a7976aaa3c54e745702ec74eb7f2ce444416d9fcaf3"
+        },
+        "CraftEngine.jar": {
+          "source": "E:\\下载\\craft-engine-paper-plugin-26.9.2.jar",
+          "sha256": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa"
+        }
+      }
+    },
+    {
+      "environment": "folia-26.2",
+      "ce": "26.10",
+      "core_build": "26.2-7-14b7fee",
+      "java": "25.0.3",
+      "native_pass": 19,
+      "load_log_pass": 2,
+      "status": "PASS",
+      "recipes": "28/107/24",
+      "config_version": 4,
+      "report": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\.local\\version-compatibility\\reports\\20261005T154514Z\\folia-26.2-ce-26.10",
+      "deployed_plugins": {
+        "Farmersdelight-Plugin-Pro.jar": {
+          "source": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\build\\libs\\Farmersdelight-Plugin-Pro-1.2.2.jar",
+          "sha256": "b9c892f3df897965a408399f20b772737ca7b5884d4c9af98b4389265d6155b1"
+        },
+        "FluidCore.jar": {
+          "source": "E:\\出售的插件\\FluidCore\\.local\\native-recipe-format-artifacts\\FluidCore-0.1.0-SNAPSHOT.jar",
+          "sha256": "ae4c584cf18c1c11d716fed395bb8cdcdf05a204d1fcb68b784128220933f04a"
+        },
+        "UltimateAdvancementAPI.jar": {
+          "source": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\libs\\UltimateAdvancementAPI-Plugin-2.8.1-pro.3.jar",
+          "sha256": "23c42974685fbdbed4b6be6e29903df4be11bed89b1e46cb0136603bdec8a589"
+        },
+        "FdVersionVerification.jar": {
+          "source": "E:\\出售的插件\\Farmersdelight-Plugin-Pro\\.local\\version-compatibility\\FdVersionVerification.jar",
+          "sha256": "90cc932052aade918c330a7976aaa3c54e745702ec74eb7f2ce444416d9fcaf3"
+        },
+        "CraftEngine.jar": {
+          "source": "E:\\下载\\craft-engine-paper-plugin-26.10-SNAPSHOT.jar",
+          "sha256": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6"
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Headless correctness only; no client rendering or live network connection",
+    "No manual player inventory/GUI interaction",
+    "No full placed-tank world save/restart or cross-region player/hopper scenario",
+    "No performance benchmark or full-version matrix in this round"
+  ],
+  "servers_created": 0
+}

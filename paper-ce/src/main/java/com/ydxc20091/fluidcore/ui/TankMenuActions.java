@@ -70,6 +70,30 @@ public final class TankMenuActions {
         return execute(context, new Request(Kind.DRAG, false, -1, ClickType.LEFT, -1, single, playerStorageSlots, includesInput));
     }
 
+    /** Native collection sees display slots too; collect only authoritative player storage. */
+    public CompletableFuture<Boolean> collectPlayer(Context context) {
+        return completed(() -> {
+            if (!validPlayer(context)) return false;
+            var cursor = cursor(context);
+            ItemStack original = cursor.current();
+            if (TankClickPlan.empty(original) || original.getAmount() >= original.getMaxStackSize()) return false;
+            var inventory = context.player().getInventory();
+            var source = new InventoryParticipant(inventory, BukkitStorageContext.entity(context.player()));
+            return transaction(context, false, tx -> {
+                int amount = original.getAmount();
+                for (int slot = 0; slot < 36 && amount < original.getMaxStackSize(); slot++) {
+                    ItemStack item = inventory.getItem(slot);
+                    if (TankClickPlan.empty(item) || !original.isSimilar(item)) continue;
+                    int take = Math.min(item.getAmount(), original.getMaxStackSize() - amount);
+                    if (!source.take(slot, item.clone(), take, tx)) return false;
+                    amount += take;
+                }
+                if (amount == original.getAmount()) return false;
+                return cursor.replace(original, TankClickPlan.amount(original, amount), tx);
+            });
+        });
+    }
+
     private CompletableFuture<Boolean> execute(Context context, Request request) {
         try {
             if (!validPlayer(context) || (request.kind() != Kind.DRAG && !supported(request.click())))

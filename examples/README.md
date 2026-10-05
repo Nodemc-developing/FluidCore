@@ -1,6 +1,6 @@
 # 独立示例插件
 
-作者：ydxc20091。`FluidCore-Examples-0.1.0-SNAPSHOT.jar` 为独立可选插件，依赖 FluidCore 和固定的 CraftEngine 26.10 快照。首次加载会将内嵌 pack 安装到 `plugins/CraftEngine/resources/fluidcore-examples`，不覆盖已有文件。更新示例 pack 时自行检查已有配置。
+作者：ydxc20091。`FluidCore-Examples-0.1.0-SNAPSHOT.jar` 为独立可选插件，依赖 FluidCore 和固定的 CraftEngine 26.9.2 或 26.10 快照。首次加载会将内嵌 pack 安装到 `plugins/CraftEngine/resources/fluidcore-examples`，不覆盖已有文件。更新示例 pack 时自行检查已有配置。
 
 包含 8000 mB 普通储罐、4000 mB 自定义水壶，以及组合储罐 controller 的休眠水处理器。普通储罐无 ticker；处理器每次唤醒最多运行一个事务，将不少于 1000 mB 的整罐水变为等量 `fluidcoreexample:heated_water`，保留组件，然后 `sleep()`。没有配方时同样睡眠。
 

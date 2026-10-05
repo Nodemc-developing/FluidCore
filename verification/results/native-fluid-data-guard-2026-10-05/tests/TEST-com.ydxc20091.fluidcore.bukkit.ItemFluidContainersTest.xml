@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" tests="23" skipped="0" failures="0" errors="0" timestamp="2026-10-05T15:38:28.813Z" hostname="WIN-B5E9U0O0ATH" time="0.027">
+  <properties/>
+  <testcase name="rejectedForeignVanillaTransfersPreserveBothInventoryItemAndTankContents()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="componentIdentityAndUnknownComponentsAreNotSilentlyCollapsed()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.003"/>
+  <testcase name="typedKeyAndInvalidMarkerAreProtectedWithRecoverableOriginalItem()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="detachedPartialFillCanTopUpExistingContentAndDrainingDoesNotTouchOriginal()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="configurationReloadInvalidatesResolvedCopiesWithoutLosingProviders()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.0"/>
+  <testcase name="customProviderCannotDuplicateCountAndSourceRollsBackIfItTries()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.003"/>
+  <testcase name="dynamicFillAndDrainArePartialIdentityAwareAndSimulateDoesNotMutate()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="negativeDrainIsRejectedEvenForEmptyContainer()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="publicDataAbsentWritePresentThenEmptyRemovesRecordAndRetainsForeignData()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.0"/>
+  <testcase name="vanillaNativeMarkersOfAnyPdcTypeCannotBypassProtectedRecordHandling()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.0"/>
+  <testcase name="emptyMarkerPreventsConfiguredInitialFluidFromRegenerating()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.0"/>
+  <testcase name="detachedFullBucketFailureRollsBackBothDirections()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="foreignFluidMarkersNeverResolveToMutableVanillaBucketsOrBottles()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="honeyBottlesTransferExactlyQuarterBucketAndNeverBecomeAnEmptyBucket()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="vanillaBucketsRequireFullThousandAndRetainNameAndExternalPdc()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.0"/>
+  <testcase name="ceBucketWithoutSettingIsNotResolvedAsVanilla()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="registryShutdownAndWrongThreadInvalidateDetachedHandlers()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="customProviderCannotMutateItsCopyDuringSimulation()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="foreignPdcClassificationUsesTheReadonlyViewWithoutAnItemMetaSnapshot()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.0"/>
+  <testcase name="carriedTankUsesOneRecordAndEmptyingNeverRegeneratesOrErasesForeignData()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <testcase name="customProvidersReceiveIsolatedCopyAndUnregistrationInvalidatesTheirHandlers()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.002"/>
+  <testcase name="detachedFillSimulationReturnsProjectionAndRollsBackSource()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.0"/>
+  <testcase name="unknownAndMalformedRecordsRemainByteExactAndProtectedInBothApis()" classname="com.ydxc20091.fluidcore.bukkit.ItemFluidContainersTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

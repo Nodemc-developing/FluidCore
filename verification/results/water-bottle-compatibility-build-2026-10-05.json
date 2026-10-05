@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-05",
+  "status": "build-and-unit-tests-passed-final-native-matrix-pending",
+  "release": 21,
+  "paper_api": "1.21-R0.1-SNAPSHOT",
+  "compiler_jdk_major": 25,
+  "test_java_major": 21,
+  "jar_sha256": "cb5ae27460a4857202b840e31133ccb95c52e7684904a6af8942dfca15a16f91",
+  "previous_compatibility_candidate_sha256": "75c6a63252f1e2b2de593ae6390d3b5bb839463a6ef41146d83dd6744fa194d4",
+  "ce_sha256": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa",
+  "ce_snapshot_sha256": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6",
+  "change": "Classify ordinary water bottles by their actual custom-effect list. Paper 1.21 can report hasCustomEffects=true for an empty native list; nonempty effect lists and non-water bases remain unsupported.",
+  "evidence": {
+    "paper_1_21": "CraftMetaPotion.hasCustomEffects checks only customEffects != null; native PotionContents decoding creates a nonnull empty list.",
+    "paper_1_21_3": "CraftMetaPotion.hasCustomEffects additionally checks !customEffects.isEmpty().",
+    "native_probe_before_fix": "Water potion had base WATER, custom-id null, hasCustomEffects true and serialized custom-effects empty. Its plain-water container resolution was rejected."
+  },
+  "tests": {
+    "core": {"tests": 73, "failures": 0, "errors": 0, "skipped": 0},
+    "paper-ce-stable-runtime": {"tests": 217, "failures": 0, "errors": 0, "skipped": 0},
+    "paper-ce-snapshot-runtime": {"tests": 217, "failures": 0, "errors": 0, "skipped": 0}
+  },
+  "pending": [
+    "Final native bucket/bottle and persistence checks on the registered server profiles",
+    "Human client menu interaction, rendering and network delivery"
+  ]
+}

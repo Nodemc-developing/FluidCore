@@ -33,12 +33,15 @@ public final class TankMenu implements AutoCloseable {
     private final Map<UUID, Session> sessions = new ConcurrentHashMap<>();
     private final Map<FluidTankController, Set<Session>> viewers = new ConcurrentHashMap<>();
     private final DeferredMenuOpen<UUID, org.bukkit.inventory.Inventory> pendingOpen = new DeferredMenuOpen<>();
-    public TankMenu(CraftEngineBridge bridge) { this.bridge = bridge; this.actions = new TankMenuActions(bridge); }
+    private final LegacyTankMenu legacy;
+    public TankMenu(CraftEngineBridge bridge) { this.bridge = bridge; this.actions = new TankMenuActions(bridge); this.legacy = new LegacyTankMenu(bridge); }
     public void open(Player player, FluidTankController tank) {
+        if (!com.ydxc20091.fluidcore.bukkit.ServerCapabilities.modernItems()) { legacy.openAsync(player, tank.location()); return; }
         if (!Bukkit.isOwnedByCurrentRegion(player) || !Bukkit.isOwnedByCurrentRegion(tank.location())) return;
         openWindow(player, tank, tank.location(), capture(tank));
     }
     public void openAsync(Player player, Location position) {
+        if (!com.ydxc20091.fluidcore.bukkit.ServerCapabilities.modernItems()) { legacy.openAsync(player, position); return; }
         Location target = position.clone();
         var request = new java.util.concurrent.atomic.AtomicReference<DeferredMenuOpen.Request<UUID, org.bukkit.inventory.Inventory>>();
         onPlayer(player, () -> {
@@ -79,6 +82,7 @@ public final class TankMenu implements AutoCloseable {
         });
     }
     public void changed(FluidTankController tank) {
+        if (!com.ydxc20091.fluidcore.bukkit.ServerCapabilities.modernItems()) { legacy.changed(tank); return; }
         Set<Session> watching = viewers.get(tank);
         if (watching == null || watching.isEmpty()) return;
         Display display = capture(tank);
@@ -92,6 +96,7 @@ public final class TankMenu implements AutoCloseable {
         }
     }
     public void retired(FluidTankController tank) {
+        if (!com.ydxc20091.fluidcore.bukkit.ServerCapabilities.modernItems()) { legacy.retired(tank); return; }
         Set<Session> watching = viewers.remove(tank);
         if (watching != null) for (Session session : watching) if (sessions.remove(session.player.getUniqueId(), session))
             session.player.getScheduler().run(bridge.plugin(), task -> session.window.close(), () -> {});
@@ -275,6 +280,7 @@ public final class TankMenu implements AutoCloseable {
         viewers.computeIfPresent(session.tank, (tank, watching) -> { watching.remove(session); return watching.isEmpty() ? null : watching; });
     }
     @Override public void close() {
+        legacy.close();
         sessions.values().forEach(session -> session.player.getScheduler().run(bridge.plugin(), task -> session.window.close(), () -> {}));
         pendingOpen.clear(); sessions.clear(); viewers.clear();
     }

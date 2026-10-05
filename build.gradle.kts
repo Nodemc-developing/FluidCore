@@ -35,7 +35,7 @@ subprojects {
         withJavadocJar()
     }
     tasks.withType<JavaCompile>().configureEach {
-        options.release.set(if (project.name == "api" || project.name == "core") 21 else 25)
+        options.release.set(21)
         options.encoding = "UTF-8"
     }
     tasks.withType<Javadoc>().configureEach {
@@ -46,6 +46,7 @@ subprojects {
     }
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
+        javaLauncher.set(project.extensions.getByType<JavaToolchainService>().launcherFor { languageVersion.set(JavaLanguageVersion.of(21)) })
         testLogging { events("failed", "skipped") }
     }
     dependencies {
@@ -88,24 +89,57 @@ val verifyCeJar by tasks.registering {
     if (ceJarFile != null) inputs.file(ceJarFile)
     doLast {
         check(ceJarFile != null && ceJarFile.isFile) {
-            "The pinned CraftEngine 26.10 JAR is required. Supply -PceJar=/absolute/path/craft-engine-paper-plugin-26.10-SNAPSHOT.jar."
+            "A pinned CraftEngine 26.9.2 or 26.10 JAR is required. Supply -PceJar=/absolute/path/CraftEngine.jar."
         }
         val digest = MessageDigest.getInstance("SHA-256").digest(ceJarFile.readBytes())
             .joinToString("") { "%02x".format(it) }
-        check(digest == providers.gradleProperty("ceSha256").get()) {
-            "CraftEngine JAR checksum mismatch. Use the pinned 26.10 snapshot or explicitly update the compatibility baseline."
+        check(digest in setOf(providers.gradleProperty("ceSha256").get(), providers.gradleProperty("ceSnapshotSha256").get())) {
+            "CraftEngine JAR checksum mismatch. Use a pinned 26.9.2 release or 26.10 snapshot."
         }
     }
 }
 val cacheCeJar by tasks.registering(Copy::class) {
     dependsOn(verifyCeJar)
     if (ceJarFile != null) from(ceJarFile)
-    into(layout.buildDirectory.dir("ce"))
+    into(layout.buildDirectory.dir("ce/baseline"))
     rename { "craft-engine-pinned.jar" }
     onlyIf { ceJarFile != null }
 }
-val pinnedCeFiles = files(layout.buildDirectory.file("ce/craft-engine-pinned.jar")).builtBy(cacheCeJar)
-val ceProxy = layout.buildDirectory.file("ce/craft-engine-proxy.jar")
+val pinnedCeFiles = files(layout.buildDirectory.file("ce/baseline/craft-engine-pinned.jar")).builtBy(cacheCeJar)
+val nativeCeJarFile = providers.gradleProperty("ceNativeJar").orNull?.let(::file)
+    ?: ceJarFile?.takeIf { providers.gradleProperty("ceSnapshotSha256").get() == MessageDigest.getInstance("SHA-256").digest(it.readBytes()).joinToString("") { byte -> "%02x".format(byte) } }
+val verifyNativeCeJar by tasks.registering {
+    if (nativeCeJarFile != null) inputs.file(nativeCeJarFile)
+    doLast {
+        check(nativeCeJarFile != null && nativeCeJarFile.isFile) {
+            "Building optional native sleep support requires -PceNativeJar=/absolute/path/craft-engine-paper-plugin-26.10-SNAPSHOT.jar."
+        }
+        val digest = MessageDigest.getInstance("SHA-256").digest(nativeCeJarFile.readBytes()).joinToString("") { "%02x".format(it) }
+        check(digest == providers.gradleProperty("ceSnapshotSha256").get()) { "Optional native adapter requires the pinned CE 26.10 snapshot." }
+    }
+}
+val cacheNativeCeJar by tasks.registering(Copy::class) {
+    dependsOn(verifyNativeCeJar)
+    if (nativeCeJarFile != null) from(nativeCeJarFile)
+    into(layout.buildDirectory.dir("ce/native"))
+    rename { "craft-engine-native-sleep.jar" }
+}
+val nativeCeFiles = files(layout.buildDirectory.file("ce/native/craft-engine-native-sleep.jar")).builtBy(cacheNativeCeJar)
+val ceProxy = layout.buildDirectory.file("ce/baseline-proxy/craft-engine-proxy.jar")
+val nativeCeProxy = layout.buildDirectory.file("ce/native-proxy/craft-engine-proxy.jar")
+val extractNativeCeProxy by tasks.registering {
+    dependsOn(verifyNativeCeJar)
+    if (nativeCeJarFile != null) inputs.file(nativeCeJarFile)
+    outputs.file(nativeCeProxy)
+    doLast {
+        ZipFile(nativeCeJarFile!!).use { zip ->
+            val entry = zip.getEntry("proxy.jarinjar") ?: error("Pinned native CE JAR has no proxy.jarinjar")
+            val output = nativeCeProxy.get().asFile
+            output.parentFile.mkdirs()
+            zip.getInputStream(entry).use { input -> output.outputStream().use { input.copyTo(it) } }
+        }
+    }
+}
 val extractCeProxy by tasks.registering {
     dependsOn(verifyCeJar)
     if (ceJarFile != null) inputs.file(ceJarFile)
@@ -160,8 +194,22 @@ project(":paper-ce") {
         "implementation"("net.momirealms:sparrow-yaml:${providers.gradleProperty("sparrowYamlVersion").get()}")
         "implementation"("net.momirealms:sparrow-ui:${providers.gradleProperty("sparrowUiVersion").get()}") { isTransitive = false }
     }
-    tasks.named<Jar>("jar") { archiveClassifier.set("thin") }
+    val sources = extensions.getByType<SourceSetContainer>()
+    val nativeSource = sources.create("nativeCe")
+    nativeSource.compileClasspath = nativeCeFiles + sources.getByName("main").output + sources.getByName("main").compileClasspath
+    tasks.named<JavaCompile>(nativeSource.compileJavaTaskName) { dependsOn(verifyNativeCeJar) }
+    dependencies { "testRuntimeOnly"(nativeSource.output) }
+    if (providers.gradleProperty("ceTestRuntime").orNull == "snapshot") {
+        tasks.withType<Test>().configureEach {
+            val baselineJar = rootProject.layout.buildDirectory.file("ce/baseline/craft-engine-pinned.jar").get().asFile
+            classpath = classpath.filter { it != baselineJar && it != ceProxy.get().asFile }
+                .plus(nativeCeFiles).plus(files(nativeCeProxy).builtBy(extractNativeCeProxy))
+        }
+    }
+    tasks.named<Jar>("sourcesJar") { from(nativeSource.allSource) }
+    tasks.named<Jar>("jar") { archiveClassifier.set("thin"); from(nativeSource.output) }
     tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+        from(nativeSource.output)
         archiveBaseName.set("FluidCore")
         archiveClassifier.set("")
         relocate("net.momirealms.sparrow.yaml", "com.ydxc20091.fluidcore.libs.yaml")
@@ -205,6 +253,8 @@ project(":benchmarks") {
 
 }
 tasks.named("build") { dependsOn(subprojects.map { it.tasks.named("build") }) }
+val distributionDirectory = providers.gradleProperty("fluidcoreDistributionRoot").orNull?.let(::file)
+    ?: rootProject.file("dist")
 tasks.register<Copy>("distribution") {
     group = "build"
     dependsOn(":paper-ce:shadowJar", ":examples:jar", ":api:jar", ":api:sourcesJar", ":core:jar", ":core:sourcesJar")
@@ -212,7 +262,7 @@ tasks.register<Copy>("distribution") {
     from(project(":examples").tasks.named("jar"))
     from(project(":api").tasks.named("jar"), project(":api").tasks.named("sourcesJar"))
     from(project(":core").tasks.named("jar"), project(":core").tasks.named("sourcesJar"))
-    into(rootProject.file("dist"))
+    into(distributionDirectory)
 }
 
 val sourceGitIgnoreFile = layout.buildDirectory.file("source-distribution/gitignore")
@@ -232,7 +282,7 @@ val sourceDistribution = tasks.register<Zip>("sourceDistribution") {
     group = "build"
     description = "Packages buildable corresponding source, examples, notices and verification records."
     archiveFileName.set("FluidCore-${project.version}-sources.zip")
-    destinationDirectory.set(rootProject.file("dist"))
+    destinationDirectory.set(distributionDirectory)
     from(rootProject.projectDir) {
         includeEmptyDirs = false
         exclude(".git/**", ".gradle/**", "**/.gradle/**", ".local/**", "dist/**", "**/build/**", "**/__pycache__/**", ".idea/**", "*.iml", "**/*.log")
