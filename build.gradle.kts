@@ -1,5 +1,6 @@
-import java.security.MessageDigest
 import java.util.zip.ZipFile
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 plugins {
     base
@@ -82,6 +83,48 @@ subprojects {
 
 project(":core") { dependencies { "api"(project(":api")) } }
 
+val ceRequiredApiEntries = listOf(
+    "net/momirealms/craftengine/core/plugin/CraftEngine.class",
+    "net/momirealms/craftengine/bukkit/plugin/BukkitCraftEngine.class",
+    "net/momirealms/craftengine/core/block/entity/BlockEntityController.class",
+    "net/momirealms/craftengine/core/block/entity/tick/BlockEntityTicker.class",
+    "net/momirealms/craftengine/core/item/setting/ItemSettingsModifiers.class",
+    "net/momirealms/craftengine/core/block/entity/render/tint/BlockEntityTintSources.class",
+    "proxy.jarinjar"
+)
+val ceNativeApiEntries = listOf(
+    "net/momirealms/craftengine/core/block/entity/tick/SleepingBlockEntityTicker.class",
+    "net/momirealms/craftengine/core/world/chunk/ChunkSubscription.class"
+)
+fun ceVersionFamily(version: String, family: String): Boolean =
+    Regex(Regex.escape(family) + "(?:[-+][A-Za-z0-9][A-Za-z0-9._+-]*)?").matches(version)
+
+fun ceArtifactVersion(jar: java.io.File): String = ZipFile(jar).use { zip ->
+    val metadata = zip.getEntry("paper-plugin.yml") ?: zip.getEntry("plugin.yml")
+        ?: error("CraftEngine plugin metadata is missing: ${jar.name}")
+    val text = zip.getInputStream(metadata).bufferedReader(Charsets.UTF_8).use { it.readText() }
+    fun field(name: String): String {
+        val values = Regex("(?m)^" + Regex.escape(name) + "[ \\t]*:[ \\t]*([^\\r\\n]+)").findAll(text).toList()
+        check(values.size == 1) { "Expected one top-level $name in CraftEngine plugin metadata: ${jar.name}" }
+        return values.single().groupValues[1].substringBefore(" #").trim().removeSurrounding("\"").removeSurrounding("'")
+    }
+    check(field("name") == "CraftEngine") { "Expected a CraftEngine plugin JAR: ${jar.name}" }
+    field("version")
+}
+
+fun verifyCeArtifact(jar: java.io.File, native: Boolean = false): String {
+    val version = ceArtifactVersion(jar)
+    check(if (native) ceVersionFamily(version, "26.10")
+        else ceVersionFamily(version, "26.9.2") || ceVersionFamily(version, "26.10")) {
+        "Unsupported CraftEngine version $version; expected ${if (native) "26.10 native APIs" else "26.9.2 or 26.10"}."
+    }
+    ZipFile(jar).use { zip ->
+        val missing = (ceRequiredApiEntries + if (native) ceNativeApiEntries else emptyList()).filter { zip.getEntry(it) == null }
+        check(missing.isEmpty()) { "CraftEngine $version is missing required build APIs: ${missing.joinToString()}" }
+    }
+    return version
+}
+
 val configuredCeJar = providers.gradleProperty("ceJar")
     .orElse(providers.environmentVariable("FLUIDCORE_CE_JAR"))
 val ceJarFile = configuredCeJar.orNull?.let(::file)
@@ -89,13 +132,9 @@ val verifyCeJar by tasks.registering {
     if (ceJarFile != null) inputs.file(ceJarFile)
     doLast {
         check(ceJarFile != null && ceJarFile.isFile) {
-            "A pinned CraftEngine 26.9.2 or 26.10 JAR is required. Supply -PceJar=/absolute/path/CraftEngine.jar."
+            "A CraftEngine 26.9.2 or 26.10 JAR is required. Supply -PceJar=/absolute/path/CraftEngine.jar."
         }
-        val digest = MessageDigest.getInstance("SHA-256").digest(ceJarFile.readBytes())
-            .joinToString("") { "%02x".format(it) }
-        check(digest in setOf(providers.gradleProperty("ceSha256").get(), providers.gradleProperty("ceSnapshotSha256").get())) {
-            "CraftEngine JAR checksum mismatch. Use a pinned 26.9.2 release or 26.10 snapshot."
-        }
+        logger.lifecycle("CraftEngine ${verifyCeArtifact(ceJarFile)} build APIs accepted; method signatures are checked by compilation.")
     }
 }
 val cacheCeJar by tasks.registering(Copy::class) {
@@ -107,15 +146,48 @@ val cacheCeJar by tasks.registering(Copy::class) {
 }
 val pinnedCeFiles = files(layout.buildDirectory.file("ce/baseline/craft-engine-pinned.jar")).builtBy(cacheCeJar)
 val nativeCeJarFile = providers.gradleProperty("ceNativeJar").orNull?.let(::file)
-    ?: ceJarFile?.takeIf { providers.gradleProperty("ceSnapshotSha256").get() == MessageDigest.getInstance("SHA-256").digest(it.readBytes()).joinToString("") { byte -> "%02x".format(byte) } }
+    ?: ceJarFile?.takeIf { it.isFile && ceVersionFamily(ceArtifactVersion(it), "26.10") }
 val verifyNativeCeJar by tasks.registering {
     if (nativeCeJarFile != null) inputs.file(nativeCeJarFile)
     doLast {
         check(nativeCeJarFile != null && nativeCeJarFile.isFile) {
             "Building optional native sleep support requires -PceNativeJar=/absolute/path/craft-engine-paper-plugin-26.10-SNAPSHOT.jar."
         }
-        val digest = MessageDigest.getInstance("SHA-256").digest(nativeCeJarFile.readBytes()).joinToString("") { "%02x".format(it) }
-        check(digest == providers.gradleProperty("ceSnapshotSha256").get()) { "Optional native adapter requires the pinned CE 26.10 snapshot." }
+        logger.lifecycle("CraftEngine ${verifyCeArtifact(nativeCeJarFile, native = true)} native sleep build APIs accepted.")
+    }
+}
+
+tasks.register("testCeArtifactCompatibility") {
+    group = "verification"
+    description = "Checks the actual build validator with metadata/API fixtures, without loading a server."
+    doLast {
+        val directory = layout.buildDirectory.dir("ce/compatibility-fixtures").get().asFile
+        directory.mkdirs()
+        fun fixture(name: String, version: String, entries: List<String> = ceRequiredApiEntries, marker: String = "first"): java.io.File {
+            val file = java.io.File(directory, "$name.jar")
+            ZipOutputStream(file.outputStream()).use { zip ->
+                zip.putNextEntry(ZipEntry("paper-plugin.yml"))
+                zip.write("name: CraftEngine\nversion: '$version'\n".toByteArray(Charsets.UTF_8)); zip.closeEntry()
+                for (entry in entries) { zip.putNextEntry(ZipEntry(entry)); zip.closeEntry() }
+                zip.putNextEntry(ZipEntry("build-marker.txt")); zip.write(marker.toByteArray(Charsets.UTF_8)); zip.closeEntry()
+            }
+            return file
+        }
+        var checked = 0
+        for (version in listOf("26.9.2", "26.9.2-SNAPSHOT", "26.9.2+build.17", "26.10", "26.10-SNAPSHOT")) {
+            check(verifyCeArtifact(fixture("accepted-$checked", version)) == version); checked++
+        }
+        val first = fixture("same-version-first", "26.9.2", marker = "first")
+        val other = fixture("same-version-other", "26.9.2", marker = "different")
+        check(!first.readBytes().contentEquals(other.readBytes()))
+        check(verifyCeArtifact(first) == verifyCeArtifact(other)); checked++
+        for (version in listOf("26.9.20", "26.9.3", "26.11", "26.9.2-")) {
+            check(runCatching { verifyCeArtifact(fixture("rejected-$checked", version)) }.isFailure); checked++
+        }
+        check(runCatching { verifyCeArtifact(fixture("missing-core-api", "26.9.2", ceRequiredApiEntries.drop(1))) }.isFailure); checked++
+        check(runCatching { verifyCeArtifact(fixture("missing-native-api", "26.10"), native = true) }.isFailure); checked++
+        check(verifyCeArtifact(fixture("native-api", "26.10-SNAPSHOT", ceRequiredApiEntries + ceNativeApiEntries), native = true) == "26.10-SNAPSHOT"); checked++
+        logger.lifecycle("CraftEngine metadata/API build compatibility fixtures: $checked passed. Class bodies/method signatures are validated by the real compilation, not by these fixtures.")
     }
 }
 val cacheNativeCeJar by tasks.registering(Copy::class) {

@@ -6,7 +6,7 @@ FluidCore supplies shared fluid data, storage and container operations for addon
 Current version: `0.1.0-SNAPSHOT`. The API is still under development.
 
 Prepared prerelease: **Build 3** (`v0.1.0-SNAPSHOT.3`), paired with Farmersdelight-Plugin-Pro 1.2.2.
-It targets Minecraft **1.21–26.3**, with Java 21 bytecode and both pinned CraftEngine **26.9.2 / 26.10** builds.
+It targets Minecraft **1.21–26.3**, with Java 21 bytecode and CraftEngine **26.9.2 / 26.10** APIs.
 See the [Build 3 release notes](RELEASE-NOTES-0.1.0-SNAPSHOT.3.md) for changes and actual verification coverage.
 [Build 2](https://github.com/Nodemc-developing/FluidCore/releases/tag/v0.1.0-SNAPSHOT.2) remains available as a historical Java 25 build.
 
@@ -48,7 +48,7 @@ amounts occupy at least one visible level, and unknown registered fluids use `ot
 
 - A compatible Paper or Folia server running CraftEngine 26.9.2 or the supported 26.10 snapshot.
 - Build 3 targets Paper/Folia 1.21–26.3 using Java 21 bytecode: run 1.21.x on Java 21 and 26.x on Java 25. Build 2 predates this compatibility work and still requires Java 25. See the [compatibility matrix](docs/compatibility.md) for the exact versions and paths tested.
-- Pinned CraftEngine builds are recorded by `ceSha256` and `ceSnapshotSha256` in [gradle.properties](gradle.properties).
+- CraftEngine 26.9.2 builds are accepted by version and required APIs, including version-preserving `-suffix` / `+build` labels. The existing 26.10 API path remains supported; unknown version families are not added. Recorded hashes in [gradle.properties](gradle.properties) identify historical verification inputs, not a build or runtime allowlist.
 
 Install CraftEngine and place `FluidCore-0.1.0-SNAPSHOT.jar` in the server's `plugins` directory. Restart the server. Install `FluidCore-Examples-0.1.0-SNAPSHOT.jar` separately if you want the optional example pack.
 
@@ -62,7 +62,9 @@ Use JDK 25 and supply the stable baseline plus the snapshot used to compile opti
 ./gradlew distribution publishToMavenLocal -PceJar=/path/to/craft-engine-paper-plugin-26.9.2.jar -PceNativeJar=/path/to/craft-engine-paper-plugin-26.10-SNAPSHOT.jar
 ```
 
-On Windows, use `.\gradlew.bat` with the same two parameters. Plugin JARs are written to `dist/`; `-PfluidcoreDistributionRoot=/path/to/output` selects another artifact directory. Both input checksums are verified. At runtime install one CraftEngine JAR; the 26.10-only adapter loads only when its native API exists.
+On Windows, use `.\gradlew.bat` with the same two parameters. Plugin JARs are written to `dist/`; `-PfluidcoreDistributionRoot=/path/to/output` selects another artifact directory. The build checks CraftEngine metadata and required API entries; compilation validates the actual method signatures. A different checksum for the same supported version does not block the build. At runtime install one CraftEngine JAR; the 26.10-only adapter loads only when its native API exists. FluidCore does not fingerprint the installed CraftEngine JAR at startup.
+
+Run `./gradlew testCeArtifactCompatibility` to check the build validator's version boundaries, distinct artifacts with the same version, and missing APIs. These document/API-entry fixtures do not replace compilation against the real dependency or server verification.
 
 ## Developer setup
 

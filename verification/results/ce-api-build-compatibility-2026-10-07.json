@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-07",
+  "status": "build-validator-fixtures-and-compatible-build-passed",
+  "scope": "Only build metadata/API validation and documentation changed. No runtime Java changes or new runtime restriction.",
+  "runtime_jar_sha256": "ae4c584cf18c1c11d716fed395bb8cdcdf05a204d1fcb68b784128220933f04a",
+  "previous_published_jar_sha256": "ae4c584cf18c1c11d716fed395bb8cdcdf05a204d1fcb68b784128220933f04a",
+  "runtime_jar_byte_identical": true,
+  "build_fixture_checks": 13,
+  "fixtures_scope": "Actual build validator exercised with metadata/API-entry fixtures, including different archive contents with the same supported version. These fixtures do not load class bodies or run a server.",
+  "supported_families": [
+    "26.9.2, including version-preserving -suffix/+build labels",
+    "Existing 26.10 API path"
+  ],
+  "rejected_examples": [
+    "26.9.20",
+    "26.9.3",
+    "26.11",
+    "Empty suffix",
+    "Missing core API entry",
+    "Missing native sleep API entry"
+  ],
+  "tests": {
+    "core": {
+      "tests": 73,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "paper-ce": {
+      "tests": 221,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "java_test_execution": "Unchanged platform 221 and core 73 results were restored from Gradle cache; no new runtime tests were claimed.",
+  "compiler_validation": "Real unchanged baseline and native source sets were restored from the matching Gradle compile cache; the final runtime JAR matches the already tested artifact byte for byte.",
+  "recorded_ce_inputs": {
+    "stable_sha256": "1f9e0935a11e7d6c7a979f2d521ec24efb715375c876a57ef3cc11e9fb9895aa",
+    "native_sha256": "46ebe45f31f3e3f0965179a85cb1f308d8729f53281d6c64f4ef2af5c23d99f6"
+  },
+  "hash_policy": "Hashes identify verification artifacts only, not a build or runtime compatibility allowlist.",
+  "servers_started": 0,
+  "committed": false,
+  "pushed": false
+}
