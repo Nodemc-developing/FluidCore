@@ -5,6 +5,13 @@ FluidCore supplies shared fluid data, storage and container operations for addon
 
 Current version: `0.1.0-SNAPSHOT`. The API is still under development.
 
+Unreleased additions on the development branch include shared-capacity multi-fluid storage,
+parent-transaction transfers, registry subscriptions, owner-confined block/item/entity/furniture
+lookups, optional fluid render assets, and cancellable real-slot container transfers. Existing
+single-tank saves and public entry points remain supported. See the [new core interfaces](docs/core-integration.md),
+[rendering guide](docs/rendering.md), and [platform integration guide](docs/integration.md).
+The snapshot version does not imply that these additions are present in the historical Build 3 JAR below.
+
 Prepared prerelease: **Build 3** (`v0.1.0-SNAPSHOT.3`), paired with Farmersdelight-Plugin-Pro 1.2.2.
 It targets Minecraft **1.21–26.3**, with Java 21 bytecode and CraftEngine **26.9.2 / 26.10** APIs.
 See the [Build 3 release notes](RELEASE-NOTES-0.1.0-SNAPSHOT.3.md) for changes and actual verification coverage.
@@ -15,10 +22,13 @@ See the [Build 3 release notes](RELEASE-NOTES-0.1.0-SNAPSHOT.3.md) for changes a
 - Immutable fluid identities, stacks and typed components; quantities and capacities use `long`.
 - Fluid registration, metadata, tags, filters and recipe ingredient matching.
 - Single and multiple tanks, read-only views, directional ports and rate limits.
+- Shared total-capacity tanks preserve distinct component identities without exposing mutable child tanks.
 - Synchronous transactions with nested rollback, plus `SIMULATE` / `EXECUTE` operations.
 - Vanilla buckets, custom CraftEngine containers and transfers through actual inventory slots.
 - Versioned persistence with protection for unknown or damaged data.
 - CraftEngine storage integration, provider registration and on-demand diagnostics.
+- Region-batched render/menu updates; committed save checkpoints and chunk dirty flags publish immediately.
+- Opt-in reusable liquid icons, layered menu grids and world-model items, with an early-client fallback.
 
 One bucket is **1000 mB**. Fluid identity includes its components, so different component values cannot be merged.
 

@@ -75,7 +75,7 @@ public final class FluidCorePlugin extends JavaPlugin implements BukkitFluidCore
     @Override public FluidRegistry registry() { return registry; }
     @Override public CraftEngineBridge bridge() { return bridge; }
     @Override public SnapshotWorkQueue workQueue() { return queue; }
-    @Override public Optional<FluidStorage> storageAt(Location location) { return bridge.resolver().resolve(location); }
+    @Override public Optional<FluidStorage> storageAt(Location location) { return bridge.lookups().block(location); }
     public FluidCoreSettings settings() { return settings; }
 
     private void reply(CommandSender sender, String text) { sender.sendMessage(Component.text(text)); }

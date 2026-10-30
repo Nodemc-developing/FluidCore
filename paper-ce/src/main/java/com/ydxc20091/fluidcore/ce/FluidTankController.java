@@ -45,6 +45,10 @@ public final class FluidTankController extends BlockEntityController {
     private int hopperCooldown;
     private volatile int glassColor = 0xffffff;
     private volatile int savedGlassColor = 0xffffff;
+    private volatile TankSaveSnapshot saveSnapshot;
+    private FluidStack checkpointContent;
+    private ItemStack checkpointInput, checkpointOutput;
+    private boolean pendingChanges;
     private final java.util.List<Runnable> neighborSubscriptions = new java.util.ArrayList<>(2);
     private static final org.bukkit.NamespacedKey GLASS_COLOR = new org.bukkit.NamespacedKey("fluidcore", "glass_color");
 
@@ -58,6 +62,7 @@ public final class FluidTankController extends BlockEntityController {
                 () -> blockEntity.world != null && Bukkit.isOwnedByCurrentRegion(location()),
                 () -> bridge.running() && activation.active() && blockEntity.isValid());
         inventory = new TankInventory(context, this::itemsChanged);
+        publishSavedSnapshot();
     }
 
     public Location location() {
@@ -147,7 +152,7 @@ public final class FluidTankController extends BlockEntityController {
     public TankMenuSettings menuSettings() { return behavior.menuSettings(); }
 
     public boolean hasProtectedData() { context.checkAccess(); return protectedData; }
-    public byte[] savedData() { return savedData.clone(); }
+    public byte[] savedData() { return saveSnapshot.fluid(); }
     public TankInventory inventory() { context.checkAccess(); return inventory; }
     public void wakeUp() { context.checkAccess(); if (ticker != null) ticker.wakeUp(); }
     public boolean tickerSleeping() { context.checkAccess(); return ticker != null && ticker.isSleeping(); }
@@ -168,10 +173,8 @@ public final class FluidTankController extends BlockEntityController {
         ItemSlotAccess source = new ItemSlotAccess(player.getInventory(), slot, BukkitStorageContext.entity(player));
         try (var transaction = FluidTransaction.open()) {
             new TankColorChange(context, () -> glassColor, value -> glassColor = value, bridge::generation, () -> {
-                savedGlassColor = glassColor;
-                blockEntity.world.blockEntityChanged(blockEntity.pos);
-                synchronizeVisual();
-                bridge.tankChanged(FluidTankController.this);
+                captureCommittedSnapshot();
+                queueChanges();
             }).set(color, transaction);
             if (player.getGameMode() != org.bukkit.GameMode.CREATIVE && !source.replaceOne(null, transaction)) return true;
             try { transaction.commit(); } catch (RuntimeException notification) { if (!transaction.isCommitted()) throw notification; }
@@ -179,9 +182,8 @@ public final class FluidTankController extends BlockEntityController {
         return true;
     }
     private void itemsChanged() {
-        savedInput = encodeItem(inventory.input()); savedOutput = encodeItem(inventory.output());
-        blockEntity.world.blockEntityChanged(blockEntity.pos); wakeUp();
-        bridge.tankChanged(this);
+        captureCommittedSnapshot();
+        queueChanges(); wakeUp();
     }
     private static byte[] encodeItem(ItemStack item) { return item == null ? null : net.momirealms.craftengine.bukkit.item.BukkitItemManager.instance().wrap(item).toBytes(); }
     private static ItemStack decodeItem(byte[] bytes) { return bytes == null ? null : (ItemStack) Item.fromBytes(bytes).platformItem(); }
@@ -200,12 +202,50 @@ public final class FluidTankController extends BlockEntityController {
     }
 
     private void committed() {
-        savedData = codec.encode(tank.content(0));
+        captureCommittedSnapshot();
         registryGeneration = bridge.registry().snapshot().generation();
-        blockEntity.world.blockEntityChanged(blockEntity.pos);
-        synchronizeVisual();
+        queueChanges(); wakeUp();
+        // Preserve the existing synchronous commit notification contract. Only presentation is deferred.
         Bukkit.getPluginManager().callEvent(new FluidStorageCommitEvent(location(), tank.version()));
-        wakeUp(); bridge.tankChanged(this);
+    }
+
+    private void queueChanges() {
+        // CE checks the chunk dirty flag before onUnload; never postpone this persistence boundary.
+        blockEntity.world.blockEntityChanged(blockEntity.pos);
+        pendingChanges = true;
+        bridge.deferTankChanges(this);
+    }
+    void flushChanges() {
+        context.checkAccess();
+        if (!pendingChanges) return;
+        pendingChanges = false;
+        try {
+            synchronizeVisual();
+            bridge.tankChanged(this);
+        } catch (RuntimeException failure) { pendingChanges = true; throw failure; }
+    }
+
+    /** All participants already hold their final state before root commit notifications run. */
+    private void captureCommittedSnapshot() {
+        context.checkAccess();
+        if (protectedData) { publishSavedSnapshot(); return; }
+        FluidStack content = tank == null ? deferredContent : tank.content(0);
+        ItemStack input = inventory.input(), output = inventory.output();
+        boolean fluidChanged = !java.util.Objects.equals(content, checkpointContent);
+        boolean inputChanged = !java.util.Objects.equals(input, checkpointInput);
+        boolean outputChanged = !java.util.Objects.equals(output, checkpointOutput);
+        if (!fluidChanged && !inputChanged && !outputChanged && glassColor == savedGlassColor) return;
+        // Encode only changed values; another participant's callback in this commit reuses this checkpoint.
+        byte[] nextFluid = fluidChanged ? codec.encode(content) : savedData;
+        byte[] nextInput = inputChanged ? encodeItem(input) : savedInput;
+        byte[] nextOutput = outputChanged ? encodeItem(output) : savedOutput;
+        savedData = nextFluid; savedInput = nextInput; savedOutput = nextOutput; savedGlassColor = glassColor;
+        checkpointContent = content; checkpointInput = input; checkpointOutput = output;
+        publishSavedSnapshot();
+    }
+
+    private void publishSavedSnapshot() {
+        saveSnapshot = new TankSaveSnapshot(savedData, savedInput, savedOutput, savedGlassColor, malformedTag, foreignData);
     }
 
     private void synchronizeVisual() {
@@ -234,19 +274,14 @@ public final class FluidTankController extends BlockEntityController {
     }
 
     @Override public void saveCustomData(CompoundTag tag) {
-        // CE may save from a worker: export the last committed immutable blob without touching live state.
-        CompoundTag foreign = foreignData;
-        if (foreign != null) { foreign.entrySet().forEach(entry -> tag.put(entry.getKey(), entry.getValue().deepClone())); return; }
-        Tag malformed = malformedTag;
-        if (malformed != null) tag.put(DATA_KEY, malformed.deepClone());
-        else tag.putByteArray(DATA_KEY, savedData.clone());
-        byte[] input = savedInput, output = savedOutput;
-        tag.putInt("fluidcore:glass_color", savedGlassColor);
-        if (input != null) tag.putByteArray("fluidcore:input", input.clone());
-        if (output != null) tag.putByteArray("fluidcore:output", output.clone());
+        // Capture one generation rather than independently reading volatile fluid and slot fields.
+        saveSnapshot.write(tag);
     }
 
     @Override public void loadCustomData(CompoundTag tag) {
+        try { loadSavedState(tag); } finally { publishSavedSnapshot(); }
+    }
+    private void loadSavedState(CompoundTag tag) {
         Integer color = tag.getInt("fluidcore:glass_color"); if (color != null) glassColor = savedGlassColor = color & 0xffffff;
         savedInput = tag.getByteArray("fluidcore:input"); savedOutput = tag.getByteArray("fluidcore:output");
         if (ForeignFluidData.compound(tag)) {
@@ -267,6 +302,9 @@ public final class FluidTankController extends BlockEntityController {
     }
 
     @Override public void loadCustomDataFromItem(Item item) {
+        try { loadItemState(item); } finally { publishSavedSnapshot(); }
+    }
+    private void loadItemState(Item item) {
         if (item.platformItem() instanceof ItemStack stack && stack.hasItemMeta()) {
             if (ForeignFluidData.item(stack)) {
                 try { savedData = preserveMalformedPdc(stack.serializeAsBytes()); }
@@ -306,6 +344,8 @@ public final class FluidTankController extends BlockEntityController {
         protectedData = !decoded.usable();
         deferredContent = decoded.stack();
         if (tank != null && activation.active() && !protectedData && !tank.content(0).equals(deferredContent)) tank.restore(deferredContent);
+        checkpointContent = null; checkpointInput = null; checkpointOutput = null;
+        publishSavedSnapshot();
         synchronizeVisual();
     }
 
@@ -318,6 +358,7 @@ public final class FluidTankController extends BlockEntityController {
         if (protectedData && foreignData == null && (savedInput != null || savedOutput != null) && !isInventoryArchive(savedData)) {
             savedData = preserveInventory(savedData, savedInput, savedOutput); malformedTag = null;
         }
+        publishSavedSnapshot();
         bridge.loadedTank(this);
         subscribeNeighborLoads();
         synchronizeVisual(); if (ticker != null) ticker.wakeUp();
@@ -341,6 +382,8 @@ public final class FluidTankController extends BlockEntityController {
     }
     @Override public void onUnload() { activation.retire(); cancelNeighborSubscriptions(); if (ticker != null) ticker.sleep(); bridge.retireTank(this); }
     @Override public void onRemove() {
+        if (blockEntity.world != null && activation.active() && !protectedData)
+            publishRender(blockEntity.blockState(), tank == null ? deferredContent : tank.content(0));
         if (blockEntity.world != null) bridge.preserveRemoval(location(), savedData);
         if (activation.active() && !hasProtectedData()) {
             ItemStack input = inventory.input(), output = inventory.output();

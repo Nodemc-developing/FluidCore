@@ -9,6 +9,21 @@ public final class FluidTransfers {
 
     /** Chooses one transferable identity in source-tank order; different fluids are never mixed. */
     public static TransferResult move(FluidStorage source, FluidStorage destination, long maximum, FluidAction action) {
+        return choose(source, destination, maximum, action, null);
+    }
+
+    /**
+     * Stages one identity in a child of parent. SUCCESS is provisional until parent commits;
+     * a rejection or simulation restores only this operation, retaining earlier parent edits.
+     */
+    public static TransferResult move(FluidStorage source, FluidStorage destination, long maximum,
+                                      FluidAction action, FluidTransaction parent) {
+        Objects.requireNonNull(parent, "parent").checkOpen();
+        return choose(source, destination, maximum, action, parent);
+    }
+
+    private static TransferResult choose(FluidStorage source, FluidStorage destination, long maximum,
+                                          FluidAction action, FluidTransaction parent) {
         Objects.requireNonNull(source, "source"); Objects.requireNonNull(destination, "destination"); Objects.requireNonNull(action, "action");
         if (maximum < 0) throw new IllegalArgumentException("Negative maximum");
         if (source == destination) return result(TransferResult.Status.REJECTED, 0, "Source and destination are identical");
@@ -22,7 +37,7 @@ public final class FluidTransfers {
                 FluidStack stack = source.content(tank);
                 if (stack.isEmpty() || !visited.add(stack.variant())) continue;
                 found = true;
-                TransferResult transferred = move(source, destination, stack.variant(), maximum, action);
+                TransferResult transferred = transfer(source, destination, stack.variant(), maximum, action, parent);
                 if (transferred.status() != TransferResult.Status.EMPTY && transferred.status() != TransferResult.Status.REJECTED) return transferred;
             }
             return result(found ? TransferResult.Status.REJECTED : TransferResult.Status.EMPTY, 0, found ? "No source identity was accepted" : "Source is empty");
@@ -31,6 +46,18 @@ public final class FluidTransfers {
     }
 
     public static TransferResult move(FluidStorage source, FluidStorage destination, FluidVariant variant, long maximum, FluidAction action) {
+        return transfer(source, destination, variant, maximum, action, null);
+    }
+
+    /** The child commits into parent; it never commits the caller's transaction or fires its notifications. */
+    public static TransferResult move(FluidStorage source, FluidStorage destination, FluidVariant variant,
+                                      long maximum, FluidAction action, FluidTransaction parent) {
+        Objects.requireNonNull(parent, "parent").checkOpen();
+        return transfer(source, destination, variant, maximum, action, parent);
+    }
+
+    private static TransferResult transfer(FluidStorage source, FluidStorage destination, FluidVariant variant,
+                                            long maximum, FluidAction action, FluidTransaction parent) {
         Objects.requireNonNull(source, "source"); Objects.requireNonNull(destination, "destination");
         Objects.requireNonNull(variant, "variant"); Objects.requireNonNull(action, "action");
         if (maximum < 0) throw new IllegalArgumentException("Negative maximum");
@@ -40,7 +67,7 @@ public final class FluidTransfers {
             if (!source.supportsTransactions() || !destination.supportsTransactions()) return result(TransferResult.Status.UNSUPPORTED, 0, "Both participants must support native transactions");
             source.context().checkSameContext(destination.context());
             if (maximum == 0) return result(TransferResult.Status.EMPTY, 0, "Zero maximum");
-            try (FluidTransaction root = FluidTransaction.open()) {
+            try (FluidTransaction root = parent == null ? FluidTransaction.open() : parent.openNested()) {
                 long available;
                 long accepted;
                 try (FluidTransaction probe = root.openNested()) {
@@ -56,7 +83,8 @@ public final class FluidTransfers {
                 if (removed != accepted || inserted != accepted) return result(TransferResult.Status.STALE, 0, "Storage changed its acceptance during the transfer");
                 transferred = accepted;
                 if (action == FluidAction.EXECUTE) root.commit();
-                return result(TransferResult.Status.SUCCESS, transferred, action == FluidAction.SIMULATE ? "Simulated" : "Committed");
+                return result(TransferResult.Status.SUCCESS, transferred, action == FluidAction.SIMULATE ? "Simulated"
+                        : parent == null ? "Committed" : "Staged in parent transaction");
             }
         } catch (FluidTransaction.CommitNotificationException exception) {
             return result(TransferResult.Status.SUCCESS, transferred, "Committed; notification failed: " + exception.getCause().getClass().getSimpleName());

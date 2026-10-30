@@ -24,6 +24,9 @@ public final class FluidTransaction implements AutoCloseable {
 
     public static boolean hasOpenTransaction() { return CURRENT.get() != null; }
 
+    /** The innermost transaction owned by this thread; never share it with another thread or tick. */
+    public static java.util.Optional<FluidTransaction> current() { return java.util.Optional.ofNullable(CURRENT.get()); }
+
     public FluidTransaction openNested() { checkCurrent(); return new FluidTransaction(this); }
 
     public void enlist(TransactionParticipant participant) {

@@ -16,6 +16,7 @@ final class FluidInteractionMessages {
         if (result == null) return null;
         return switch (result) {
             case SUCCESS, NOT_A_CONTAINER -> null;
+            case CANCELLED -> chinese(locale) ? "流体操作已取消。" : "The fluid transfer was cancelled.";
             case NO_TRANSFER -> messages.text(locale, "no-transfer");
             case NO_INVENTORY_SPACE -> messages.text(locale, "no-space");
             case PROTECTED_DATA -> messages.text(locale, "protected-transfer");
