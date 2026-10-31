@@ -25,6 +25,23 @@ class ItemContainerTransfersTest {
     private final FluidRegistry registry = new FluidRegistry();
     private final FluidStackCodec codec = new FluidStackCodec(registry);
 
+    @Test void deniedApprovalRestoresTheSlotAndFluidWithoutPublishingTheTentativeChange() {
+        Fixture fixture = new Fixture(new DataStack(Material.GLASS_BOTTLE, 1));
+        var notices = new java.util.concurrent.atomic.AtomicInteger();
+        var approvals = new java.util.concurrent.atomic.AtomicInteger();
+        FluidTank tank = new FluidTank(8000, fixture.context, variant -> true, notices::incrementAndGet);
+        var transfer = new ItemContainerTransfers(registry, item -> FILLED, item -> false, preview -> {
+            approvals.incrementAndGet();
+            assertFalse(preview.fillingContainer()); assertEquals(500, preview.moved().amount());
+            assertEquals(500, tank.current().amount()); assertEquals(0, notices.get());
+            return false;
+        });
+        assertEquals(ItemContainerTransfers.Result.CANCELLED, transfer.transfer(fixture.slot, GameMode.SURVIVAL, tank, 500));
+        assertTrue(tank.isEmpty()); assertEquals(1, fixture.items[0].getAmount());
+        assertNull(ItemContainerTransfers.data(fixture.items[0], ItemContainerTransfers.DATA_KEY));
+        assertEquals(1, approvals.get()); assertEquals(0, notices.get());
+    }
+
     @Test void detachedChildExecutionCanBeRolledBackWithItsUnfinishedSlotTransaction() {
         Fixture fixture = new Fixture(new DataStack(Material.GLASS_BOTTLE, 1));
         var notifications = new java.util.concurrent.atomic.AtomicInteger();

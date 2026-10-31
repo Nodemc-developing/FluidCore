@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-30",
+  "status": "verified_development_candidate",
+  "artifact": "FluidCore-0.1.0-SNAPSHOT.jar",
+  "artifact_sha256": "60490e8cf21f08964e1e3b3c3d858903ab8a4b2da4d4d81b3bf7c23f03b6ff02",
+  "base_commit": "0094c9daff18244b85d79e8a2c444690193e169b",
+  "unique_behavior_tests": 348,
+  "junit": {
+    "core": {
+      "tests": 97,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "platform_ce2692": {
+      "tests": 251,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "platform_ce2610": {
+      "tests": 251,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "build_dependency_metadata_fixtures": 13,
+  "native_matrix": [
+    {
+      "environment": "paper-26.3",
+      "ce": "26.9.2",
+      "java_major": 25,
+      "candidate_sha256": "60490e8cf21f08964e1e3b3c3d858903ab8a4b2da4d4d81b3bf7c23f03b6ff02",
+      "server_jar_sha256": "98aabc113a80b9b5e183475e839a17cf99c39c915a1f46b8f35a5e89fd5de0f1",
+      "pass": true,
+      "root_configuration_unchanged": true,
+      "report": "20261030T124121Z-paper-26.3-ce26.9.2.json",
+      "report_sha256": "38978769c93593cf21a6718a5fb15ffd7b97afaa7fd199b11d792e7952a0d994",
+      "first": {
+        "exit_code": 0,
+        "markers": [
+          "FLUIDCORE_CAPABILITIES PASS",
+          "FLUIDCORE_CE_VERIFY PASS",
+          "FLUIDCORE_RENDER_BAD_STYLE_READY",
+          "FLUIDCORE_RENDER_FALLBACK PASS",
+          "FLUIDCORE_RENDER_RECOVERY PASS",
+          "FLUIDCORE_STANDARD_API PASS",
+          "FLUIDCORE_VERIFY PASS"
+        ],
+        "seconds": 18.11
+      },
+      "restart": {
+        "exit_code": 0,
+        "markers": [
+          "FLUIDCORE_CAPABILITIES_RESTART PASS",
+          "FLUIDCORE_PERSISTENCE PASS"
+        ],
+        "seconds": 14.42
+      },
+      "resource_failure_recovery": true
+    },
+    {
+      "environment": "paper-26.3",
+      "ce": "26.10",
+      "java_major": 25,
+      "candidate_sha256": "60490e8cf21f08964e1e3b3c3d858903ab8a4b2da4d4d81b3bf7c23f03b6ff02",
+      "server_jar_sha256": "98aabc113a80b9b5e183475e839a17cf99c39c915a1f46b8f35a5e89fd5de0f1",
+      "pass": true,
+      "root_configuration_unchanged": true,
+      "report": "20261030T124227Z-paper-26.3-ce26.10.json",
+      "report_sha256": "3e1f6c2fabb8b037dd425276a92bceec4c24fa9c1b841c0bf82a6d520b0a9d61",
+      "first": {
+        "exit_code": 0,
+        "markers": [
+          "FLUIDCORE_CAPABILITIES PASS",
+          "FLUIDCORE_CE_VERIFY PASS",
+          "FLUIDCORE_RENDER_BAD_STYLE_READY",
+          "FLUIDCORE_RENDER_FALLBACK PASS",
+          "FLUIDCORE_RENDER_RECOVERY PASS",
+          "FLUIDCORE_STANDARD_API PASS",
+          "FLUIDCORE_VERIFY PASS"
+        ],
+        "seconds": 19.72
+      },
+      "restart": {
+        "exit_code": 0,
+        "markers": [
+          "FLUIDCORE_CAPABILITIES_RESTART PASS",
+          "FLUIDCORE_PERSISTENCE PASS"
+        ],
+        "seconds": 14.33
+      },
+      "resource_failure_recovery": true
+    },
+    {
+      "environment": "folia-26.2",
+      "ce": "26.10",
+      "java_major": 25,
+      "candidate_sha256": "60490e8cf21f08964e1e3b3c3d858903ab8a4b2da4d4d81b3bf7c23f03b6ff02",
+      "server_jar_sha256": "128a634192261cd38bb4a5dc54075018a0f896fd6c6f529e37dca6e99e32b3b3",
+      "pass": true,
+      "root_configuration_unchanged": true,
+      "report": "20261030T124328Z-folia-26.2-ce26.10.json",
+      "report_sha256": "9d83e9ccf33ca0ac0b73cd55aec9795134cd365957946a5ae8250d437dcd8235",
+      "first": {
+        "exit_code": 0,
+        "markers": [
+          "FLUIDCORE_CAPABILITIES PASS",
+          "FLUIDCORE_CE_VERIFY PASS",
+          "FLUIDCORE_RENDER_BAD_STYLE_READY",
+          "FLUIDCORE_RENDER_FALLBACK PASS",
+          "FLUIDCORE_RENDER_RECOVERY PASS",
+          "FLUIDCORE_STANDARD_API PASS",
+          "FLUIDCORE_VERIFY PASS"
+        ],
+        "seconds": 19.62
+      },
+      "restart": {
+        "exit_code": 0,
+        "markers": [
+          "FLUIDCORE_CAPABILITIES_RESTART PASS",
+          "FLUIDCORE_PERSISTENCE PASS"
+        ],
+        "seconds": 13.56
+      },
+      "resource_failure_recovery": true
+    },
+    {
+      "environment": "paper-1.21",
+      "ce": "26.9.2",
+      "java_major": 21,
+      "candidate_sha256": "60490e8cf21f08964e1e3b3c3d858903ab8a4b2da4d4d81b3bf7c23f03b6ff02",
+      "server_jar_sha256": "ab9bb1afc3cea6978a0c03ce8448aa654fe8a9c4dddf341e7cbda1b0edaa73f5",
+      "pass": true,
+      "root_configuration_unchanged": true,
+      "report": "20261030T124433Z-paper-1.21-ce26.9.2.json",
+      "report_sha256": "0ec82e5df987b6456ae2e9297170cc197e889f34afd848ca633b6d5b796c1e08",
+      "first": {
+        "exit_code": 0,
+        "markers": [
+          "FLUIDCORE_CAPABILITIES PASS",
+          "FLUIDCORE_CE_VERIFY PASS",
+          "FLUIDCORE_STANDARD_API PASS",
+          "FLUIDCORE_VERIFY PASS"
+        ],
+        "seconds": 31.17
+      },
+      "restart": {
+        "exit_code": 0,
+        "markers": [
+          "FLUIDCORE_CAPABILITIES_RESTART PASS",
+          "FLUIDCORE_PERSISTENCE PASS"
+        ],
+        "seconds": 21.3
+      },
+      "resource_failure_recovery": false
+    }
+  ],
+  "preserved_contracts": [
+    "existing public methods and single-tank save keys",
+    "synchronous FluidStorageCommitEvent",
+    "immediate committed save checkpoint and chunk dirty flag",
+    "Paper 1.21-1.21.3 rendering fallback"
+  ],
+  "not_validated": [
+    "human client visual appearance",
+    "real player network delivery",
+    "same-environment performance comparison",
+    "arbitrary third-party protection/provider combinations"
+  ],
+  "raw_evidence_location": "Retained outside the repository under E:/codex-tmp/fluidcore-capabilities-verification"
+}
