@@ -3,13 +3,12 @@ package com.ydxc20091.fluidcore.ce;
 
 import com.ydxc20091.fluidcore.api.FluidStorage;
 import com.ydxc20091.fluidcore.api.FluidStack;
-import com.ydxc20091.fluidcore.api.FluidVariant;
-import com.ydxc20091.fluidcore.api.FluidTransaction;
 import com.ydxc20091.fluidcore.api.StorageContext;
 import com.ydxc20091.fluidcore.api.StorageAccessException;
 import com.ydxc20091.fluidcore.bukkit.BukkitStorageContext;
 import com.ydxc20091.fluidcore.bukkit.BlockStorageProvider;
 import com.ydxc20091.fluidcore.bukkit.BlockFluidSnapshot;
+import com.ydxc20091.fluidcore.bukkit.ProviderStorageView;
 import net.momirealms.craftengine.bukkit.api.BukkitAdaptor;
 import net.momirealms.craftengine.core.block.entity.BlockEntity;
 import net.momirealms.craftengine.core.world.BlockPos;
@@ -23,6 +22,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Resolves the current controller rather than retaining chunk or entity objects in a cache. */
 public final class BlockProviderResolver {
@@ -34,9 +34,9 @@ public final class BlockProviderResolver {
         var builtin = controller(location).map(FluidTankController::storage);
         if (builtin.isPresent() || !bridge.running()) return builtin;
         for (Registration registration : providers) {
-            if (!registration.owner.isEnabled()) { providers.remove(registration); continue; }
+            if (!registration.active.get() || !registration.owner.isEnabled()) { registration.active.set(false); providers.remove(registration); continue; }
             Optional<FluidStorage> storage = Objects.requireNonNull(registration.provider.resolve(location.clone()), "Provider returned null instead of Optional");
-            if (storage.isPresent()) return Optional.of(guard(location, registration.owner, storage.get()));
+            if (storage.isPresent()) return Optional.of(guard(location, registration, storage.get()));
         }
         return Optional.empty();
     }
@@ -47,11 +47,11 @@ public final class BlockProviderResolver {
         if (!owner.isEnabled()) throw new IllegalArgumentException("Provider owner must be enabled");
         Registration registration = new Registration(Objects.requireNonNull(owner), Objects.requireNonNull(provider));
         providers.add(registration);
-        return () -> providers.remove(registration);
+        return () -> { registration.active.set(false); providers.remove(registration); };
     }
 
-    void unregisterOwner(Plugin owner) { providers.removeIf(registration -> registration.owner == owner); }
-    void close() { providers.clear(); }
+    void unregisterOwner(Plugin owner) { providers.removeIf(registration -> { if (registration.owner != owner) return false; registration.active.set(false); return true; }); }
+    void close() { providers.forEach(registration -> registration.active.set(false)); providers.clear(); }
 
     /** The returned provider remains thread-confined. Prefer executeScheduled or querySnapshotScheduled. */
 
@@ -77,29 +77,20 @@ public final class BlockProviderResolver {
         });
     }
 
-    private FluidStorage guard(Location location, Plugin owner, FluidStorage storage) {
+    private FluidStorage guard(Location location, Registration registration, FluidStorage storage) {
         Location position = location.clone();
         long generation = bridge.generation();
-        StorageContext context = BukkitStorageContext.block(position, () -> owner.isEnabled() && bridge.running()
+        StorageContext context = BukkitStorageContext.block(position, () -> registration.active.get() && registration.owner.isEnabled() && bridge.running()
                 && generation == bridge.generation());
-        StorageContext delegated = storage.context();
-        context.checkSameContext(delegated);
-        return new FluidStorage() {
-            private void check() { context.checkSameContext(delegated); }
-            @Override public StorageContext context() { return new StorageContext() {
-                @Override public void checkAccess() { check(); }
-                @Override public long tick() { check(); return context.tick(); }
-            }; }
-            @Override public boolean supportsTransactions() { check(); return storage.supportsTransactions(); }
-            @Override public int tanks() { check(); return storage.tanks(); }
-            @Override public FluidStack content(int index) { check(); return storage.content(index); }
-            @Override public long capacity(int index) { check(); return storage.capacity(index); }
-            @Override public long insert(FluidVariant fluid, long amount, FluidTransaction transaction) { check(); return storage.insert(fluid, amount, transaction); }
-            @Override public long extract(FluidVariant fluid, long amount, FluidTransaction transaction) { check(); return storage.extract(fluid, amount, transaction); }
-        };
+        return new ProviderStorageView(storage, context);
     }
 
-    private record Registration(Plugin owner, BlockStorageProvider provider) {}
+    private static final class Registration {
+        final Plugin owner;
+        final BlockStorageProvider provider;
+        final AtomicBoolean active = new AtomicBoolean(true);
+        Registration(Plugin owner, BlockStorageProvider provider) { this.owner = owner; this.provider = provider; }
+    }
 
     public Optional<FluidTankController> controller(Location location) {
         if (!Bukkit.isOwnedByCurrentRegion(location)) throw new StorageAccessException("Resolve a block provider on its owning region thread");

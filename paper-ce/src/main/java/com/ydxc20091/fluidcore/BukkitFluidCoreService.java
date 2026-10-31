@@ -26,4 +26,10 @@ public interface BukkitFluidCoreService {
 
     /** Real-slot atomic operations and explicitly detached replacement-item operations. */
     default ItemContainerTransfers containerTransfers() { return bridge().containers(); }
+
+    /** Owner-confined lookup for blocks, items, entities and explicitly registered furniture. */
+    default com.ydxc20091.fluidcore.bukkit.FluidStorageLookup lookups() { return bridge().lookups(); }
+
+    /** Opt-in render styles; registering a style does not change existing block states. */
+    default com.ydxc20091.fluidcore.render.FluidRenderService renders() { return bridge().renders(); }
 }

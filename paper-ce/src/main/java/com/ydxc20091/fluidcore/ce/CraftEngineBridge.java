@@ -53,6 +53,9 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
     private final ChunkLoadWatch chunkLoads;
     private final com.ydxc20091.fluidcore.ui.TankMenu menus;
     private final com.ydxc20091.fluidcore.bukkit.RegionItemHandoff handoffs;
+    private final com.ydxc20091.fluidcore.bukkit.FluidStorageLookup lookups;
+    private final com.ydxc20091.fluidcore.render.FluidRenderService renders;
+    private final RegionChangeBatcher<RegionAddress, FluidTankController> changes;
     private volatile TankProcessor processor;
     private final TankRecipeNavigation recipeNavigation = new TankRecipeNavigation();
     private volatile com.ydxc20091.fluidcore.config.FluidMessages messages = com.ydxc20091.fluidcore.config.FluidMessages.defaults();
@@ -70,12 +73,25 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
         this.registry = Objects.requireNonNull(registry);
         parser = new FluidConfigParser(registry, plugin.getLogger());
         resolver = new BlockProviderResolver(this);
-        containers = new ItemContainerTransfers(registry, this::definition, CraftEngineItems::isCustomItem);
+        containers = new ItemContainerTransfers(registry, this::definition, CraftEngineItems::isCustomItem, transfer -> {
+            var event = new com.ydxc20091.fluidcore.bukkit.FluidContainerTransferEvent(transfer);
+            Bukkit.getPluginManager().callEvent(event);
+            return !event.isCancelled();
+        });
         hoppers = new TankHoppers(this);
         chunkLoads = new ChunkLoadWatch(this);
         menus = new com.ydxc20091.fluidcore.ui.TankMenu(this);
         int capacity = plugin instanceof com.ydxc20091.fluidcore.FluidCorePlugin core && core.settings() != null ? core.settings().handoffCapacity() : 128;
         handoffs = new com.ydxc20091.fluidcore.bukkit.RegionItemHandoff(plugin.getDataFolder().toPath().resolve("handoff-recovery"), capacity);
+        lookups = new com.ydxc20091.fluidcore.bukkit.FluidStorageLookup(plugin, resolver,
+                containers.containers(), this::running, this::generation);
+        renders = new com.ydxc20091.fluidcore.render.FluidRenderService(plugin, registry);
+        changes = new RegionChangeBatcher<>(128, (region, update) ->
+                Bukkit.getRegionScheduler().runDelayed(plugin, region.world(), region.x(), region.z(), task -> {
+                    update.run();
+                }, 1), (tank, activation) -> {
+                    if (running && isLoadedTank(tank) && tank.sameActivation(activation)) tank.flushChanges();
+                }, failure -> plugin.getLogger().log(Level.WARNING, "Cannot refresh changed fluid storage", failure));
     }
 
     /** Invoke from onLoad, after CE onLoad and before CE begins its first resource parse. */
@@ -105,6 +121,7 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
         if (!registered) throw new IllegalStateException("Register the bridge before starting it");
         running = true;
         Bukkit.getPluginManager().registerEvents(this, plugin);
+        Bukkit.getPluginManager().registerEvents(renders, plugin);
         if (parser.publish()) generation.incrementAndGet();
     }
 
@@ -113,6 +130,7 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
         parser.publish();
         generation.incrementAndGet();
         containers.containers().invalidate();
+        lookups.invalidate();
         wakeLoadedTanks();
     }
     @EventHandler public void onChunkLoad(org.bukkit.event.world.ChunkLoadEvent event) { chunkLoads.loaded(event); }
@@ -122,6 +140,8 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
         recipeNavigation.unregisterOwner(event.getPlugin());
         resolver.unregisterOwner(event.getPlugin());
         containers.containers().unregisterOwner(event.getPlugin());
+        lookups.unregisterOwner(event.getPlugin());
+        registry.unregisterListeners(event.getPlugin());
     }
 
     private ContainerDefinition definition(ItemStack item) {
@@ -139,7 +159,7 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
             return InteractionResult.SUCCESS_AND_CANCEL;
         }
         try {
-            var storage = resolver.resolve(location);
+            var storage = lookups.block(location);
             if (storage.isEmpty()) return InteractionResult.PASS;
             if (!BukkitCraftEngine.instance().antiGriefProvider().test(player, Flag.OPEN_CONTAINER, location)) return InteractionResult.SUCCESS_AND_CANCEL;
             int slot = context.getHand() == InteractionHand.OFF_HAND ? 40 : player.getInventory().getHeldItemSlot();
@@ -148,7 +168,8 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
             TankProcessor currentProcessor = processor;
             if (nativeTank != null && currentProcessor != null && currentProcessor.interact(nativeTank, player, slot))
                 return InteractionResult.SUCCESS_AND_CANCEL;
-            var result = containers.transfer(player, slot, storage.get(), Long.MAX_VALUE);
+            var result = containers.transfer(player, slot, storage.get(), Long.MAX_VALUE, location);
+            if (result == ItemContainerTransfers.Result.CANCELLED) return InteractionResult.SUCCESS_AND_CANCEL;
             if (result != ItemContainerTransfers.Result.SUCCESS) {
                 var controller = resolver.controller(location);
                 if (controller.isPresent()) menus.open(player, controller.get());
@@ -183,6 +204,8 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
     public FluidRegistry registry() { return registry; }
     public BlockProviderResolver resolver() { return resolver; }
     public ItemContainerTransfers containers() { return containers; }
+    public com.ydxc20091.fluidcore.bukkit.FluidStorageLookup lookups() { return lookups; }
+    public com.ydxc20091.fluidcore.render.FluidRenderService renders() { return renders; }
     public long generation() { return generation.get(); }
     public boolean running() { return running; }
     public TankHoppers hoppers() { return hoppers; }
@@ -214,6 +237,13 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
         }).exceptionally(failure -> null));
     }
     void tankChanged(FluidTankController tank) { menus.changed(tank); }
+    void deferTankChanges(FluidTankController tank) {
+        if (!running || !isLoadedTank(tank)) return;
+        Location location = tank.location();
+        changes.mark(new RegionAddress(location.getWorld(), location.getBlockX() >> 4, location.getBlockZ() >> 4),
+                tank, tank.activationVersion());
+    }
+    private record RegionAddress(org.bukkit.World world, int x, int z) { }
     void retireTank(FluidTankController tank) { loadedTanks.remove(tank); renderStates.remove(BlockAddress.of(tank.location())); hoppers.retire(tank); if (processor != null) processor.retired(tank); menus.retired(tank); }
 
     void preserveRemoval(Location location, byte[] data) {
@@ -255,6 +285,9 @@ public final class CraftEngineBridge implements AutoCloseable, Listener {
 
     @Override public void close() {
         running = false;
+        changes.close();
+        lookups.close();
+        renders.close();
         chunkLoads.close();
         menus.close(); processor = null;
         recipeNavigation.clear();

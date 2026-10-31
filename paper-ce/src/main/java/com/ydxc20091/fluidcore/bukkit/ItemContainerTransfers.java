@@ -22,18 +22,31 @@ public final class ItemContainerTransfers {
     public static final NamespacedKey DATA_KEY = ItemFluidData.DATA_KEY;
     public static final NamespacedKey TANK_DATA_KEY = new NamespacedKey("fluidcore", "tank_data");
     private final ItemFluidContainerRegistry containers;
+    private final TransferApproval approval;
 
     public ItemContainerTransfers(FluidRegistry registry, Function<ItemStack, ContainerDefinition> customDefinition) {
         this(registry, customDefinition, item -> false);
     }
     public ItemContainerTransfers(FluidRegistry registry, Function<ItemStack, ContainerDefinition> customDefinition,
                                  Predicate<ItemStack> customItem) {
+        this(registry, customDefinition, customItem, transfer -> true);
+    }
+    /** The approval callback executes before a real-slot transaction commits; false rolls it back. */
+    public ItemContainerTransfers(FluidRegistry registry, Function<ItemStack, ContainerDefinition> customDefinition,
+                                 Predicate<ItemStack> customItem, TransferApproval approval) {
         containers = new ItemFluidContainerRegistry(registry, customDefinition, customItem);
+        this.approval = Objects.requireNonNull(approval);
     }
     public ItemFluidContainerRegistry containers() { return containers; }
     public ItemFluidData itemData() { return containers.itemData(); }
     public Optional<ItemFluidContainer> resolve(ItemStack item) { return containers.resolve(item); }
-    public enum Result { SUCCESS, NOT_A_CONTAINER, PROTECTED_DATA, NO_TRANSFER, NO_INVENTORY_SPACE, ATOMIC_TRANSFER_UNSUPPORTED }
+    public enum Result { SUCCESS, NOT_A_CONTAINER, PROTECTED_DATA, NO_TRANSFER, NO_INVENTORY_SPACE, ATOMIC_TRANSFER_UNSUPPORTED, CANCELLED }
+    @FunctionalInterface public interface TransferApproval { boolean approve(TransferContext transfer); }
+    public record TransferContext(Player player, org.bukkit.Location target, int inventorySlot,
+                                  FluidStorage storage, FluidStack moved, boolean fillingContainer) {
+        public TransferContext { target = target == null ? null : target.clone(); }
+        @Override public org.bukkit.Location target() { return target == null ? null : target.clone(); }
+    }
 
     /**
      * Fills an isolated count-one item and returns its replacement. SIMULATE rolls back the source,
@@ -79,8 +92,11 @@ public final class ItemContainerTransfers {
 
     /** Creative players retain a filled input when filling storage; extraction delivers its output. */
     public Result transfer(Player player, int inventorySlot, FluidStorage storage, long maximum) {
+        return transfer(player, inventorySlot, storage, maximum, null);
+    }
+    public Result transfer(Player player, int inventorySlot, FluidStorage storage, long maximum, org.bukkit.Location target) {
         ItemSlotAccess slot = new ItemSlotAccess(player.getInventory(), inventorySlot, BukkitStorageContext.entity(player));
-        return transfer(slot, player.getGameMode(), storage, maximum);
+        return transfer(slot, player.getGameMode(), storage, maximum, player, target, inventorySlot);
     }
     /**
      * Both actual slot replacement and fluid mutation enlist in this single synchronous native
@@ -89,6 +105,10 @@ public final class ItemContainerTransfers {
      * but extracting from storage must replace the empty container with the transferred fluid.
      */
     public Result transfer(ItemSlotAccess slot, GameMode mode, FluidStorage storage, long maximum) {
+        return transfer(slot, mode, storage, maximum, null, null, -1);
+    }
+    private Result transfer(ItemSlotAccess slot, GameMode mode, FluidStorage storage, long maximum,
+                            Player player, org.bukkit.Location target, int inventorySlot) {
         Objects.requireNonNull(slot, "slot"); Objects.requireNonNull(mode, "mode"); Objects.requireNonNull(storage, "storage");
         if (maximum < 0) throw new IllegalArgumentException("Negative transfer maximum");
         storage.context().checkSameContext(slot.context());
@@ -108,6 +128,8 @@ public final class ItemContainerTransfers {
             if (moved.isEmpty()) return Result.NO_TRANSFER;
             if ((mode != GameMode.CREATIVE || fillingContainer)
                     && !slot.replaceOne(handler.item(), transaction)) return Result.NO_INVENTORY_SPACE;
+            if (!approval.approve(new TransferContext(player, target, inventorySlot, storage, moved, fillingContainer)))
+                return Result.CANCELLED;
             commit(transaction);
             return Result.SUCCESS;
         }
